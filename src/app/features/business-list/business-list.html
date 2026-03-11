@@ -1,0 +1,148 @@
+<div class="business-list-container">
+  <mat-toolbar class="header">
+    <span>{{ isAccountsView() ? 'Business Accounts' : 'Business Profiles' }}</span>
+    <button mat-button (click)="toggleView()" class="toggle-button">
+      Switch to {{ isAccountsView() ? 'Profiles' : 'Accounts' }}
+    </button>
+  </mat-toolbar>
+
+  @if (error()) {
+    <app-error-message [message]="error() || ''" (retry)="loadData()"></app-error-message>
+  }
+
+  @if (loading()) {
+    <app-loading-spinner></app-loading-spinner>
+  } @else {
+    <div class="stats-container">
+      <mat-card class="stat-card">
+        <mat-card-header>
+          <mat-card-title>Total {{ isAccountsView() ? 'Accounts' : 'Profiles' }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>{{ getTotalRecords() }}</h2>
+          <p>All loaded</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-header>
+          <mat-card-title>Active</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>{{ getActiveCount() }}</h2>
+          <p>Currently live</p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-header>
+          <mat-card-title>Maintenance On</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <h2>{{ getMaintenanceCount() }}</h2>
+          <p>Message enabled</p>
+        </mat-card-content>
+      </mat-card>
+
+      @if (!isAccountsView()) {
+        <mat-card class="stat-card">
+          <mat-card-header>
+            <mat-card-title>Environments</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <h2>2</h2>
+            <p>Unique environments</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <div class="search-container">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search {{ isAccountsView() ? 'accounts' : 'profiles' }}…</mat-label>
+        <input matInput [placeholder]="'Search ' + (isAccountsView() ? 'accounts' : 'profiles') + '…'" [(ngModel)]="searchTerm" (ngModelChange)="currentPage.set(0)">
+        <button matSuffix mat-icon-button aria-label="Clear">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="filter-chips">
+        <button mat-button [class.active]="isFilterActive('all')" (click)="setActiveFilter('all')">All</button>
+        <button mat-button [class.active]="isFilterActive('active')" (click)="setActiveFilter('active')">Active</button>
+        <button mat-button [class.active]="isFilterActive('maintenance')" (click)="setActiveFilter('maintenance')">Maintenance</button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="getPaginatedData()" class="data-table">
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let item">{{ item.Name }}</td>
+        </ng-container>
+
+        <!-- WhatsApp Number Column -->
+        <ng-container matColumnDef="whatsapp">
+          <th mat-header-cell *matHeaderCellDef>WhatsApp Number</th>
+          <td mat-cell *matCellDef="let item">{{ item.WhatsAppNumber }}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let item">
+            <app-status-badge [isActive]="item.isActive"></app-status-badge>
+          </td>
+        </ng-container>
+
+        <!-- Maintenance Column -->
+        <ng-container matColumnDef="maintenance">
+          <th mat-header-cell *matHeaderCellDef>Maintenance Message</th>
+          <td mat-cell *matCellDef="let item">
+            @if (item.MaintenanceMessageEnabled) {
+              <span class="maintenance-badge">Maintenance</span>
+            }
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let item">
+            <button mat-button [routerLink]="['/business-details', item.Id]">View Details</button>
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="['name', 'whatsapp', 'status', 'maintenance', 'actions']"
+        ></tr>
+        <tr
+          mat-row
+          *matRowDef="
+            let row;
+            columns: ['name', 'whatsapp', 'status', 'maintenance', 'actions'];
+            let i = index
+          "
+          [routerLink]="['/business-details', row.Id]"
+        ></tr>
+      </table>
+
+      @if (getPaginatedData().length > 0) {
+        <mat-paginator
+          [length]="getTotalPages() * pageSize()"
+          [pageSize]="pageSize()"
+          [pageIndex]="currentPage()"
+          (page)="onPageChange($event.pageIndex)"
+          [pageSizeOptions]="[10, 25, 50]"
+        ></mat-paginator>
+      }
+    </div>
+  }
+
+  @if (!loading() && !error()) {
+    <mat-card class="summary">
+      Total records: {{ getTotalRecords() }}
+    </mat-card>
+  }
+</div>

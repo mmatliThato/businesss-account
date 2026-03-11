@@ -1,0 +1,107 @@
+<div class="details-container">
+  <div class="header">
+    <h1>Details: {{ getDisplayName() }}</h1>
+    <a [routerLink]="['/business-accounts']" class="back-button">← Back to List</a>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+      <button (click)="loadDetails(id())" class="retry-button">Retry</button>
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      Loading details...
+    </div>
+  } @else if (!error() && (account() || profile())) {
+    <div class="details-grid">
+      <div class="detail-card">
+        <h3>Basic Information</h3>
+        <dl>
+          <dt>Business ID</dt>
+          <dd>{{ isAccount() ? account()!.Id : profile()!.Id }}</dd>
+
+          <dt>Name</dt>
+          <dd>{{ getDisplayName() }}</dd>
+
+          <dt>WhatsApp Number</dt>
+          <dd>{{ getWhatsAppNumber() }}</dd>
+
+          <dt>Status</dt>
+          <dd>
+            <span class="status-badge" [class.active]="getStatus()">
+              {{ getStatus() ? 'Active' : 'Inactive' }}
+            </span>
+          </dd>
+        </dl>
+      </div>
+
+      @if (!isAccount()) {
+        <div class="detail-card">
+          <h3>WABA Account Metadata</h3>
+          <dl>
+            <dt>Environment</dt>
+            <dd>{{ profile()!.WabaAccountMetaData }}</dd>
+          </dl>
+        </div>
+      }
+
+      <div class="detail-card">
+        <h3>Maintenance Configuration</h3>
+        <dl>
+          <dt>Maintenance Message Enabled</dt>
+          <dd>
+            <span class="status-badge" [class.active]="getMaintenanceEnabled()">
+              {{ getMaintenanceEnabled() ? 'Yes' : 'No' }}
+            </span>
+          </dd>
+
+          @if (getMaintenanceBody()) {
+            <dt>Maintenance Message</dt>
+            <dd>{{ getMaintenanceBody() }}</dd>
+
+            @if (getMaintenanceButtonText()) {
+              <dt>Button Text</dt>
+              <dd>{{ getMaintenanceButtonText() }}</dd>
+
+              <dt>Button URL</dt>
+              <dd>
+                <a href="{{ getMaintenanceButtonUrl() }}" target="_blank">{{
+                  getMaintenanceButtonUrl()
+                }}</a>
+              </dd>
+            }
+          }
+        </dl>
+      </div>
+
+      @if (!isAccount() && getCallbackConfigs().length > 0) {
+        <div class="detail-card">
+          <h3>Callback Configuration</h3>
+          <dl>
+            @for (config of getCallbackConfigs(); track config.CallbackMessageUri) {
+              <dt>Callback Message URI</dt>
+              <dd>
+                <a href="{{ config.CallbackMessageUri }}" target="_blank">{{
+                  config.CallbackMessageUri
+                }}</a>
+              </dd>
+
+              <dt>Callback Status URI</dt>
+              <dd>
+                <a href="{{ config.CallbackStatusUri }}" target="_blank">{{
+                  config.CallbackStatusUri
+                }}</a>
+              </dd>
+            }
+          </dl>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="no-data">No details available for this business.</div>
+  }
+</div>
