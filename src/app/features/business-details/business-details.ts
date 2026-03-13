@@ -4,10 +4,11 @@ import { BusinessAccount, BusinessProfile } from '../../core/models/business.mod
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-business-details',
-  imports: [CommonModule, RouterLink, SharedModule],
+  imports: [CommonModule, RouterLink, SharedModule, FormsModule],
   templateUrl: './business-details.html',
   styleUrl: './business-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,12 @@ export class BusinessDetails {
   profile = signal<BusinessProfile | null>(null);
   isAccount = signal<boolean>(true);
   id = signal<string>('');
+
+  // API Settings Form
+  apiEnvironment = signal<'development' | 'production'>('development');
+  replyCallbackEnabled = signal<boolean>(false);
+  apiAddress = signal<string>('');
+  clientSecret = signal<string>('');
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id') || '';
@@ -47,6 +54,10 @@ export class BusinessDetails {
     if (profile) {
       this.isAccount.set(false);
       this.profile.set(profile);
+      // Initialize form with existing data
+      this.apiAddress.set(profile.ApiAddress || '');
+      this.clientSecret.set(profile.ClientSecret || '');
+      this.replyCallbackEnabled.set(profile.ReplyCallbackEnabled || false);
       this.loading.set(false);
       return;
     }
@@ -122,27 +133,5 @@ export class BusinessDetails {
 
   getStatus(): boolean {
     return this.isAccount() ? this.account()?.isActive || false : this.profile()?.isActive || false;
-  }
-
-  getMaintenanceEnabled(): boolean {
-    return this.isAccount()
-      ? this.account()?.MaintenanceMessageEnabled || false
-      : this.profile()?.MaintenanceMessageEnabled || false;
-  }
-
-  getMaintenanceBody(): string {
-    return this.isAccount() ? '' : this.profile()?.MaintenanceMessageBody || '';
-  }
-
-  getMaintenanceButtonText(): string {
-    return this.isAccount() ? '' : this.profile()?.MaintenanceMessageButtonText || '';
-  }
-
-  getMaintenanceButtonUrl(): string {
-    return this.isAccount() ? '' : this.profile()?.MaintenanceMessageButtonUrl || '';
-  }
-
-  getCallbackConfigs(): any[] {
-    return this.isAccount() ? [] : this.profile()?.ClientCallbackConfig || [];
   }
 }

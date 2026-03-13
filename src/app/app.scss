@@ -1,110 +1,155 @@
 /* Global Styles */
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f5f5;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: #f5f7fa;
+  color: #1f2937;
 }
 
-/* Navbar Styles */
-.navbar {
+/* App Container */
+.app-container {
+  height: 100vh;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-  height: 64px;
-  background-color: #003d82;
-  color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+}
 
-  .navbar-left {
-    display: flex;
-    align-items: center;
-    gap: 32px;
+.sidenav-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+/* Sidebar Styles */
+.app-sidenav {
+  width: 280px;
+  background-color: white;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto;
 
-      .logo-icon {
-        background-color: #ffd700;
-        color: #003d82;
-        width: 32px;
-        height: 32px;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 16px;
-      }
-
-      .logo-text {
-        font-size: 18px;
-        font-weight: 600;
-      }
-    }
-
-    .navbar-menu {
-      display: flex;
-      gap: 24px;
-
-      a {
-        color: white;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        transition: opacity 0.3s ease;
-
-        &:hover {
-          opacity: 0.8;
-        }
-
-        &.active {
-          border-bottom: 2px solid #ffd700;
-          padding-bottom: 2px;
-        }
-      }
-    }
-  }
-
-  .navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    button[mat-icon-button] {
-      color: white;
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-    }
+  .sidenav-header {
+    padding: 32px 24px;
+    border-bottom: 1px solid #e5e7eb;
 
     .user-profile {
       display: flex;
       align-items: center;
-      gap: 8px;
-
-      .user-name {
-        font-size: 14px;
-        font-weight: 500;
-      }
+      gap: 16px;
 
       .avatar {
-        width: 32px;
-        height: 32px;
-        background-color: #ffd700;
-        color: #003d82;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
+        object-fit: cover;
+        background-color: #e5e7eb;
+      }
+
+      .user-info {
+        flex: 1;
+
+        .welcome-text {
+          font-size: 12px;
+          color: #6b7280;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .user-name {
+          display: block;
+          font-size: 16px;
+          font-weight: 600;
+          color: #1f2937;
+        }
       }
     }
   }
+
+  mat-nav-list {
+    padding-top: 0;
+
+    a[mat-list-item] {
+      color: #4b5563;
+      text-decoration: none;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #f9fafb;
+        color: #1e88e5;
+      }
+
+      &.active-link {
+        background-color: #e3f2fd;
+        color: #1e88e5;
+        font-weight: 600;
+      }
+    }
+
+    mat-icon[matListIcon] {
+      color: #7c8a98;
+      margin-right: 16px;
+
+      a[mat-list-item].active-link & {
+        color: #1e88e5;
+      }
+    }
+  }
+
+  .nav-divider {
+    height: 1px;
+    background-color: #e5e7eb;
+    margin: 8px 0;
+  }
+
+  h3[mat-subheader] {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+    padding: 8px 24px;
+  }
+}
+
+/* Toolbar Styles */
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #003366;
+
+  .toolbar-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .spacer {
+    flex: 1;
+  }
+
+  button[mat-icon-button] {
+    color: white;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  .add-account-btn {
+    background-color: #e3f2fd !important;
+    color: #003366 !important;
+
+    &:hover {
+      background-color: #bbdefb !important;
+    }
+  }
+}
+
+/* Main Content */
+.main-content {
+  padding: 32px;
+  overflow-y: auto;
+  flex: 1;
 }

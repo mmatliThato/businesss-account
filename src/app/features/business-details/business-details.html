@@ -1,107 +1,98 @@
-<div class="details-container">
-  <div class="header">
-    <h1>Details: {{ getDisplayName() }}</h1>
-    <a [routerLink]="['/business-accounts']" class="back-button">← Back to List</a>
+<div class="screen-container">
+  <!-- Side Navigation -->
+  <div class="side-nav">
+    <button class="back-button" [routerLink]="['/business-accounts']">
+      <svg width="15.52" height="12" viewBox="0 0 15.52 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.48 6H3.04L9.76 1.2C10.12 -0.04 10.56 -0.04 10.92 1.2L15.52 6L10.92 10.8C10.56 12.04 10.12 12.04 9.76 10.8L3.04 6H12.48Z" fill="#222E37"/>
+      </svg>
+      <span>Back</span>
+    </button>
   </div>
 
-  @if (error()) {
-    <div class="error-message">
-      {{ error() }}
-      <button (click)="loadDetails(id())" class="retry-button">Retry</button>
-    </div>
-  }
-
-  @if (loading()) {
-    <div class="loading-spinner">
-      <div class="spinner"></div>
-      Loading details...
-    </div>
-  } @else if (!error() && (account() || profile())) {
-    <div class="details-grid">
-      <div class="detail-card">
-        <h3>Basic Information</h3>
-        <dl>
-          <dt>Business ID</dt>
-          <dd>{{ isAccount() ? account()!.Id : profile()!.Id }}</dd>
-
-          <dt>Name</dt>
-          <dd>{{ getDisplayName() }}</dd>
-
-          <dt>WhatsApp Number</dt>
-          <dd>{{ getWhatsAppNumber() }}</dd>
-
-          <dt>Status</dt>
-          <dd>
-            <span class="status-badge" [class.active]="getStatus()">
-              {{ getStatus() ? 'Active' : 'Inactive' }}
-            </span>
-          </dd>
-        </dl>
+  <!-- Content Frame -->
+  <div class="content-frame">
+    @if (error()) {
+      <div class="error-message">
+        {{ error() }}
+        <button (click)="loadDetails(id())" class="retry-button">Retry</button>
       </div>
+    }
 
-      @if (!isAccount()) {
-        <div class="detail-card">
-          <h3>WABA Account Metadata</h3>
-          <dl>
-            <dt>Environment</dt>
-            <dd>{{ profile()!.WabaAccountMetaData }}</dd>
-          </dl>
-        </div>
-      }
-
-      <div class="detail-card">
-        <h3>Maintenance Configuration</h3>
-        <dl>
-          <dt>Maintenance Message Enabled</dt>
-          <dd>
-            <span class="status-badge" [class.active]="getMaintenanceEnabled()">
-              {{ getMaintenanceEnabled() ? 'Yes' : 'No' }}
-            </span>
-          </dd>
-
-          @if (getMaintenanceBody()) {
-            <dt>Maintenance Message</dt>
-            <dd>{{ getMaintenanceBody() }}</dd>
-
-            @if (getMaintenanceButtonText()) {
-              <dt>Button Text</dt>
-              <dd>{{ getMaintenanceButtonText() }}</dd>
-
-              <dt>Button URL</dt>
-              <dd>
-                <a href="{{ getMaintenanceButtonUrl() }}" target="_blank">{{
-                  getMaintenanceButtonUrl()
-                }}</a>
-              </dd>
-            }
-          }
-        </dl>
+    @if (loading()) {
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        Loading details...
       </div>
+    } @else if (!error() && (account() || profile())) {
+      <!-- Page Title -->
+      <h2>Business Profile</h2>
 
-      @if (!isAccount() && getCallbackConfigs().length > 0) {
-        <div class="detail-card">
-          <h3>Callback Configuration</h3>
-          <dl>
-            @for (config of getCallbackConfigs(); track config.CallbackMessageUri) {
-              <dt>Callback Message URI</dt>
-              <dd>
-                <a href="{{ config.CallbackMessageUri }}" target="_blank">{{
-                  config.CallbackMessageUri
-                }}</a>
-              </dd>
-
-              <dt>Callback Status URI</dt>
-              <dd>
-                <a href="{{ config.CallbackStatusUri }}" target="_blank">{{
-                  config.CallbackStatusUri
-                }}</a>
-              </dd>
-            }
-          </dl>
+      <!-- Two-column layout -->
+      <div class="cards-grid">
+        <!-- Profile Details Card -->
+        <div class="profile-card">
+          <h3>Profile Details</h3>
+          <div class="status-indicator">
+            <span class="status-dot active"></span>
+            <span class="status-label">Active</span>
+          </div>
         </div>
-      }
-    </div>
-  } @else {
-    <div class="no-data">No details available for this business.</div>
-  }
+
+        <!-- Setup API Card -->
+        <div class="setup-api-card">
+          <h3>Set-up API</h3>
+
+          <!-- Environment Radio Group -->
+          <div class="radio-group-container">
+            <label class="radio-option">
+              <input type="radio" [checked]="apiEnvironment() === 'development'"
+                     (change)="apiEnvironment.set('development')">
+              <span class="radio-custom"></span>
+              Development
+            </label>
+            <label class="radio-option">
+              <input type="radio" [checked]="apiEnvironment() === 'production'"
+                     (change)="apiEnvironment.set('production')">
+              <span class="radio-custom"></span>
+              Production
+            </label>
+          </div>
+
+          <!-- API Settings Section -->
+          <h4>API Settings</h4>
+
+          <!-- Reply Callback Toggle -->
+          <div class="toggle-container">
+            <label class="switch">
+              <input type="checkbox" [checked]="replyCallbackEnabled()"
+                     (change)="replyCallbackEnabled.set($event.target.checked)">
+              <span class="slider round"></span>
+            </label>
+            <div class="toggle-label">
+              <span>Reply callback</span>
+              <span class="toggle-description">Specify callback return method</span>
+            </div>
+          </div>
+
+          <!-- API Address -->
+          <div class="form-group">
+            <label class="input-label">Address</label>
+            <input type="text" [(ngModel)]="apiAddress"
+                   placeholder="Enter API address"
+                   class="api-input full-width">
+          </div>
+
+          <!-- Client Secret -->
+          <div class="form-group">
+            <label class="input-label">Client secret</label>
+            <input type="password" [(ngModel)]="clientSecret"
+                   placeholder="Enter client secret"
+                   class="api-input">
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="no-data">No details available for this business.</div>
+    }
+  </div>
 </div>

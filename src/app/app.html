@@ -1,26 +1,31 @@
-<nav class="navbar">
-  <div class="navbar-left">
-    <div class="logo">
-      <span class="logo-icon">M</span>
-      <span class="logo-text">MAP Portal</span>
-    </div>
-    <div class="navbar-menu">
-      <a [routerLink]="['/business-accounts']" routerLinkActive="active">Business Accounts</a>
-      <a [routerLink]="['/business-profiles']" routerLinkActive="active">Business Profiles</a>
-    </div>
-  </div>
-  <div class="navbar-right">
-    <button mat-icon-button aria-label="Refresh">
-      <mat-icon>refresh</mat-icon>
-    </button>
-    <button mat-icon-button aria-label="Add Account">
-      <mat-icon>add</mat-icon>
-    </button>
-    <div class="user-profile">
-      <span class="user-name">Thato M.</span>
-      <div class="avatar">TM</div>
-    </div>
-  </div>
-</nav>
+<div class="layout-container">
+  <header class="header">
+    <div class="logo">Business Manager Portal</div>
+    <button class="sign-out-btn">Sign Out</button>
+  </header>
 
-<router-outlet />
+  <main class="main-content">
+    <div class="nav-tabs">
+      <span class="tab active">Business Profile</span>
+      <span class="tab">Message Templates</span>
+    </div>
+
+    <div class="action-bar">
+      <input type="text" class="search-input" placeholder="Search..." />
+      <select class="filter-dropdown">
+        <option>Newest to oldest</option>
+      </select>
+      <button class="add-profile-btn">+ Add Profile</button>
+    </div>
+
+    <div class="data-table-container">
+      <div class="table-header">
+        <!-- Table headers will be implemented in the feature components -->
+      </div>
+      <div class="table-content">
+        <!-- Table content will be rendered by feature components -->
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+</div>

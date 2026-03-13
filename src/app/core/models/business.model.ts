@@ -19,4 +19,7 @@ export interface BusinessProfile extends BusinessAccount {
   MaintenanceMessageButtonUrl: string;
   MaintenanceMessageHeaderUrl: string;
   ClientCallbackConfig: ClientCallbackConfig[];
+  ApiAddress?: string;
+  ClientSecret?: string;
+  ReplyCallbackEnabled?: boolean;
 }

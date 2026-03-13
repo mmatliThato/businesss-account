@@ -1,1 +1,161 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global SCSS Design Tokens */
+$primary-blue: #0051FF;
+$secondary-blue: #003FCA;
+$bg-light: #F4F5F7;
+$border-pale: #CED3D9;
+$text-medium: #222E37;
+$text-light: #697786;
+
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Benton Sans Pro', sans-serif;
+  line-height: 1.3;
+  color: $text-medium;
+  background-color: white;
+}
+
+/* Layout Container - Matches Figma specifications */
+.layout-container {
+  width: 1440px;
+  min-width: 1440px;
+  margin: 0 auto;
+
+  .header {
+    height: 64px;
+    background-color: $secondary-blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+
+    .sign-out-btn {
+      width: 119px;
+      height: 64px;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .main-content {
+    width: 1360px;
+    min-width: 1077px;
+    margin-top: 64px;
+    margin-left: 80px;
+    padding: 40px;
+    gap: 20px;
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      width: 1278px;
+      position: relative;
+      top: 0;
+      left: 0;
+
+      .tab {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.3;
+        padding: 8px 0;
+        margin-right: 24px;
+        cursor: pointer;
+        color: $text-light;
+
+        &.active {
+          color: $primary-blue;
+        }
+      }
+    }
+
+    /* Action Bar */
+    .action-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 24px;
+
+      .search-input {
+        width: 785px;
+        height: 48px;
+        border: 1px solid $border-pale;
+        border-radius: 12px;
+        padding: 0 16px;
+        font-size: 16px;
+        color: $text-light;
+
+        &::placeholder {
+          color: $text-light;
+        }
+      }
+
+      .filter-dropdown {
+        width: 240px;
+        height: 48px;
+        border: 1px solid $border-pale;
+        border-radius: 8px;
+        padding: 0 16px;
+        font-size: 16px;
+        color: $text-light;
+      }
+
+      .add-profile-btn {
+        width: 173px;
+        height: 48px;
+        background-color: $secondary-blue;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+
+    /* Data Table */
+    .data-table-container {
+      width: 1280px;
+      height: 788px;
+      background-color: white;
+      border: 1px solid $border-pale;
+      border-radius: 12px;
+      margin-top: 24px;
+
+      .table-header {
+        height: 56px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: $text-medium;
+      }
+
+      .table-content {
+        width: 1278px;
+        min-width: 992px;
+        height: 583px;
+
+        /* Table rows and cells would be implemented here */
+      }
+    }
+  }
+}
