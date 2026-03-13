@@ -1,31 +1,10 @@
-<div class="layout-container">
+<app-sidebar>
   <header class="header">
     <div class="logo">Business Manager Portal</div>
     <button class="sign-out-btn">Sign Out</button>
   </header>
 
   <main class="main-content">
-    <div class="nav-tabs">
-      <span class="tab active">Business Profile</span>
-      <span class="tab">Message Templates</span>
-    </div>
-
-    <div class="action-bar">
-      <input type="text" class="search-input" placeholder="Search..." />
-      <select class="filter-dropdown">
-        <option>Newest to oldest</option>
-      </select>
-      <button class="add-profile-btn">+ Add Profile</button>
-    </div>
-
-    <div class="data-table-container">
-      <div class="table-header">
-        <!-- Table headers will be implemented in the feature components -->
-      </div>
-      <div class="table-content">
-        <!-- Table content will be rendered by feature components -->
-        <router-outlet></router-outlet>
-      </div>
-    </div>
+    <router-outlet></router-outlet>
   </main>
-</div>
+</app-sidebar>

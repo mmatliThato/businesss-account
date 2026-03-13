@@ -10,6 +10,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { SidebarComponent } from './shared/components/sidebar.component';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +27,8 @@ import { MatInputModule } from '@angular/material/input';
     MatTableModule,
     MatChipsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    SidebarComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
