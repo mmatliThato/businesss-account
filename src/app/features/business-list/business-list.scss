@@ -1,70 +1,148 @@
-.business-list-container {
-  width: 1278px;
-  height: 583px;
-  position: relative;
+/* --- 1. FIGMA DESIGN TOKENS --- */
+$secondary-135: #003FCA;
+$neutral-pale-grey: #CED3D9;
+$neutral-light-grey-80: #697786;
+$neutral-white: #FFFFFF;
+$success-green: #E8F5E9;
+$success-text: #2E7D32;
+$error-red: #FFEBEE;
+$error-text: #C62828;
 
-  .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.8);
+/* --- 2. LAYOUT & HEADER --- */
+.content-frame {
+  width: 1280px; 
+  margin: 0 auto;
+}
+
+.page-header {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: 32px;
+
+  h1 {
+    margin: 0;
+    color: #000000;
+    font-family: 'Benton Sans Pro', sans-serif;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 130%;
+  }
+}
+
+/* --- 3. TABLE CARD & ACTIONS --- */
+.table-card {
+  background: $neutral-white;
+  border: 1px solid $neutral-pale-grey;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.table-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 99px;
+  padding: 0 24px;
+  background: #F8F8FA;
+  border-bottom: 1px solid $neutral-pale-grey;
+
+  .search-input {
     display: flex;
-    justify-content: center;
     align-items: center;
-    z-index: 10;
+    width: 785px !important;
+    height: 48px;
+    background: $neutral-white;
+    border: 1px solid $neutral-pale-grey;
+    border-radius: 12px;
+    padding: 0 16px;
+    input { flex: 1; border: none; outline: none; font-size: 16px; color: $neutral-light-grey-80; }
+    mat-icon { color: $neutral-light-grey-80; margin-right: 8px; }
   }
 
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
+  /* Corrected Action Group Alignment */
+  .action-group {
+    display: flex;
+    align-items: center;
+    gap: 24px;
 
-    thead {
-      tr {
-        th {
-          font-size: 14px;
-          font-weight: 500;
-          color: #222E37;
-          padding: 16px 8px;
-          text-align: left;
-
-          &.name-column {
-            width: 30%;
-          }
-
-          &.whatsapp-column {
-            width: 40%;
-          }
-
-          &.status-column {
-            width: 30%;
-          }
-        }
-      }
+    .sort-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: $neutral-light-grey-80;
+      font-size: 14px;
+      cursor: pointer;
     }
+  }
 
-    tbody {
-      tr.data-row {
-        height: 56px;
-        border-bottom: 1px solid #E5E7EB;
+  .add-btn {
+    width: 173px;
+    height: 48px;
+    background: $secondary-135;
+    color: $neutral-white;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+}
 
-        &:hover {
-          background-color: #F9FAFB;
-        }
+/* --- 4. STATUS BADGE STYLING --- */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 600;
+  background: $error-red;
+  color: $error-text;
 
-        td {
-          padding: 16px 8px;
-          font-size: 14px;
-          color: #222E37;
+  &.active {
+    background: $success-green;
+    color: $success-text;
+  }
 
-          &.name-cell,
-          &.whatsapp-cell {
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-        }
-      }
-    }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background: currentColor;
+  }
+}
+
+/* --- 5. THE STRICT PAGINATOR FIX --- */
+::ng-deep .mat-mdc-paginator {
+  background: $neutral-white !important;
+  border-top: 1px solid $neutral-pale-grey;
+
+  .mat-mdc-text-field-wrapper {
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+
+  .mat-mdc-form-field-flex {
+    border-bottom: 2px solid $secondary-135 !important;
+    background: transparent !important;
+  }
+
+  .mdc-line-ripple { display: none !important; }
+
+  .mat-mdc-select-value, .mat-mdc-select-arrow svg {
+    color: $secondary-135 !important;
+    fill: $secondary-135 !important;
+  }
+
+  .mat-mdc-paginator-navigation-next, .mat-mdc-paginator-navigation-previous {
+    color: $secondary-135 !important;
   }
 }

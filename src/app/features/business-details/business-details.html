@@ -1,98 +1,123 @@
 <div class="screen-container">
-  <!-- Side Navigation -->
   <div class="side-nav">
-    <button class="back-button" [routerLink]="['/business-accounts']">
-      <svg width="15.52" height="12" viewBox="0 0 15.52 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12.48 6H3.04L9.76 1.2C10.12 -0.04 10.56 -0.04 10.92 1.2L15.52 6L10.92 10.8C10.56 12.04 10.12 12.04 9.76 10.8L3.04 6H12.48Z" fill="#222E37"/>
-      </svg>
+    <button class="back-link" [routerLink]="['/business-accounts']">
+      <mat-icon>keyboard_backspace</mat-icon>
       <span>Back</span>
     </button>
   </div>
 
-  <!-- Content Frame -->
   <div class="content-frame">
-    @if (error()) {
-      <div class="error-message">
-        {{ error() }}
-        <button (click)="loadDetails(id())" class="retry-button">Retry</button>
-      </div>
-    }
+    <div class="page-header">
+      <h1>Business Profile</h1>
+      <button class="update-btn">UPDATE</button>
+    </div>
 
-    @if (loading()) {
-      <div class="loading-spinner">
-        <div class="spinner"></div>
-        Loading details...
-      </div>
-    } @else if (!error() && (account() || profile())) {
-      <!-- Page Title -->
-      <h2>Business Profile</h2>
+    <app-tab-navigation 
+      [currentTab]="currentTab()" 
+      (tabSelected)="currentTab.set($event)">
+    </app-tab-navigation>
 
-      <!-- Two-column layout -->
-      <div class="cards-grid">
-        <!-- Profile Details Card -->
-        <div class="profile-card">
-          <h3>Profile Details</h3>
-          <div class="status-indicator">
-            <span class="status-dot active"></span>
-            <span class="status-label">Active</span>
-          </div>
-        </div>
+    <div class="tab-content">
+      @if (currentTab() === 'profile') {
+        <div class="profile-grid">
+          
+          <div class="left-col">
+            <div class="details-card">
+              <div class="card-title-row">
+                <h3>Profile Details</h3>
+                <span class="status-badge" [class.active]="getStatus()">
+                  <span class="dot"></span> {{ getStatus() ? 'Active' : 'Inactive' }}
+                </span>
+              </div>
+              
+              <div class="info-group">
+                <label>Display name</label>
+                <p>{{ getDisplayName() }}</p>
+              </div>
+              <div class="info-group">
+                <label>WhatsApp number</label>
+                <p>{{ getWhatsAppNumber() }}</p>
+              </div>
+              <div class="info-group">
+                <label>Date created</label>
+                <p>12/03/2026</p>
+              </div>
+            </div>
 
-        <!-- Setup API Card -->
-        <div class="setup-api-card">
-          <h3>Set-up API</h3>
-
-          <!-- Environment Radio Group -->
-          <div class="radio-group-container">
-            <label class="radio-option">
-              <input type="radio" [checked]="apiEnvironment() === 'development'"
-                     (change)="apiEnvironment.set('development')">
-              <span class="radio-custom"></span>
-              Development
-            </label>
-            <label class="radio-option">
-              <input type="radio" [checked]="apiEnvironment() === 'production'"
-                     (change)="apiEnvironment.set('production')">
-              <span class="radio-custom"></span>
-              Production
-            </label>
-          </div>
-
-          <!-- API Settings Section -->
-          <h4>API Settings</h4>
-
-          <!-- Reply Callback Toggle -->
-          <div class="toggle-container">
-            <label class="switch">
-              <input type="checkbox" [checked]="replyCallbackEnabled()"
-                     (change)="replyCallbackEnabled.set($event.target.checked)">
-              <span class="slider round"></span>
-            </label>
-            <div class="toggle-label">
-              <span>Reply callback</span>
-              <span class="toggle-description">Specify callback return method</span>
+            <div class="details-card api-summary">
+              <h3>API Details</h3>
+              <div class="info-group">
+                <label>API name</label>
+                <p>Populated</p>
+              </div>
+              <div class="info-group">
+                <label>API key</label>
+                <p class="mono">••••••••••••••••</p>
+              </div>
+              <div class="info-group">
+                <label>API ID</label>
+                <p class="mono">{{ getAccountId() }}</p>
+              </div>
             </div>
           </div>
 
-          <!-- API Address -->
-          <div class="form-group">
-            <label class="input-label">Address</label>
-            <input type="text" [(ngModel)]="apiAddress"
-                   placeholder="Enter API address"
-                   class="api-input full-width">
+          <div class="right-col">
+            <div class="form-card">
+              <h3>Set-up API</h3>
+              
+              <div class="input-field">
+                <label>API name</label>
+                <input type="text" placeholder="Populated">
+              </div>
+
+              <div class="input-field">
+                <label>Description</label>
+                <input type="text" placeholder="Short description">
+              </div>
+
+              <div class="env-selector">
+                <label class="radio-item">
+                  <input type="radio" name="env" value="development" [checked]="apiEnvironment() === 'development'">
+                  <span>Development</span>
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="env" value="production" [checked]="apiEnvironment() === 'production'">
+                  <span>Production</span>
+                </label>
+              </div>
+
+              <hr class="divider">
+
+              <h3>API Settings</h3>
+              
+              <div class="setting-row">
+                <div class="setting-text">
+                  <label>Reply callback</label>
+                  <span>Specify callback return method</span>
+                </div>
+                <mat-slide-toggle color="primary"></mat-slide-toggle>
+              </div>
+
+              <div class="input-field">
+                <label>Address</label>
+                <input type="text" [ngModel]="apiAddress()" placeholder="API address">
+              </div>
+
+              <div class="dual-inputs">
+                <div class="input-field">
+                  <label>Client secret</label>
+                  <input type="text" placeholder="Label">
+                </div>
+                <div class="input-field">
+                  <label>Scope</label>
+                  <input type="text" placeholder="Label">
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Client Secret -->
-          <div class="form-group">
-            <label class="input-label">Client secret</label>
-            <input type="password" [(ngModel)]="clientSecret"
-                   placeholder="Enter client secret"
-                   class="api-input">
-          </div>
         </div>
-      </div>
-    } @else {
-      <div class="no-data">No details available for this business.</div>
-    }
+      }
+    </div>
   </div>
 </div>

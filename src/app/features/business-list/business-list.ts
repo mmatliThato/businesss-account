@@ -1,155 +1,104 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { BusinessService } from '../../core/models/services/business.service';
-import { BusinessAccount, BusinessProfile } from '../../core/models/business.model';
-import { RouterLink } from '@angular/router';
+import { 
+  Component, 
+  inject, 
+  signal, 
+  ViewChild, 
+  AfterViewInit, 
+  effect, 
+  ChangeDetectionStrategy 
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router'; // Removed RouterLink since we use (click)
 import { SharedModule } from '../../shared/shared.module';
+import { BusinessService } from '../../core/models/services/business.service';
+
+// Material Imports
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';      // Added for three-dots menu
+import { MatDividerModule } from '@angular/material/divider'; // Added for menu separator
+import { TabNavigationComponent } from '../business-profile/tab-navigation.component';
 
 @Component({
   selector: 'app-business-list',
-  imports: [CommonModule, RouterLink, SharedModule],
+  standalone: true,
+  imports: [
+    CommonModule, 
+    SharedModule, 
+    TabNavigationComponent,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,    // Necessary for [matMenuTriggerFor]
+    MatDividerModule  // Necessary for <mat-divider>
+  ],
   templateUrl: './business-list.html',
   styleUrl: './business-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BusinessList {
+export class BusinessList implements AfterViewInit {
   private businessService = inject(BusinessService);
-  accounts = this.businessService.accounts;
-  profiles = this.businessService.profiles;
+  private router = inject(Router);
+  
+  // Data State from Service
   loading = this.businessService.loading;
-  error = signal<string | null>(null);
+  
+  // Material Table Setup
+  dataSource = new MatTableDataSource<any>([]);
+  displayedColumns: string[] = ['name', 'accountId', 'whatsapp', 'phoneId', 'status', 'actions'];
 
-  isAccountsView = signal<boolean>(true);
-  pageSize = signal<number>(10);
-  currentPage = signal<number>(0);
-  searchTerm = signal<string>('');
-  activeFilter = signal<'all' | 'active' | 'maintenance'>('all');
+  // UI State
+  currentTab = signal<'profile' | 'templates'>('profile');
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor() {
+    // Effect to reactively update the table when data or tab changes
+    effect(() => {
+      const data = this.currentTab() === 'profile' ? this.businessService.profiles() : [];
+      this.dataSource.data = data;
+    });
+
     this.loadData();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   loadData() {
-    this.error.set(null);
-    if (this.isAccountsView()) {
-      this.businessService.fetchAccounts().subscribe({
-        error: (err: unknown) => {
-          this.error.set('Failed to load business accounts. Please try again.');
-          console.error(err);
-        }
-      });
-    } else {
-      this.businessService.fetchProfiles().subscribe({
-        error: (err: unknown) => {
-          this.error.set('Failed to load business profiles. Please try again.');
-          console.error(err);
-        }
-      });
+    this.businessService.fetchAccounts().subscribe();
+    this.businessService.fetchProfiles().subscribe();
+  }
+
+  // Filter logic for the search bar
+  applyFilter(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = value.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 
-  toggleView() {
-    this.isAccountsView.update(v => !v);
-    this.currentPage.set(0); // Reset page when switching views
-    this.activeFilter.set('all'); // Reset filter
-    this.loadData();
+  // Navigation to the detail page (triggered by row click or menu)
+  navigateToDetails(id: string) {
+    console.log('Navigating to Business Details:', id);
+    this.router.navigate(['/business-details', id]);
   }
 
-  onPageChange(pageIndex: number) {
-    this.currentPage.set(pageIndex);
+  // Placeholder for the "Add Profile" button
+  addProfile() {
+    console.log('Open add profile action');
+    // You can navigate or open a dialog here
   }
 
-  setActiveFilter(filter: 'all' | 'active' | 'maintenance') {
-    this.activeFilter.set(filter);
-    this.currentPage.set(0); // Reset to first page when filter changes
-  }
-
-  getPaginatedData(): BusinessAccount[] | BusinessProfile[] {
-    const data = this.isAccountsView() ? this.accounts() : this.profiles();
-    let filteredData = [...data]; // Create a copy
-
-    // Apply search filter
-    if (this.searchTerm()) {
-      const term = this.searchTerm().toLowerCase();
-      filteredData = filteredData.filter(item =>
-        item.Name.toLowerCase().includes(term) ||
-        item.WhatsAppNumber.includes(term)
-      );
-    }
-
-    // Apply active/maintenance filter
-    switch (this.activeFilter()) {
-      case 'active':
-        filteredData = filteredData.filter(item => item.isActive);
-        break;
-      case 'maintenance':
-        filteredData = filteredData.filter(item => item.MaintenanceMessageEnabled);
-        break;
-      default:
-        // 'all' - no additional filtering
-        break;
-    }
-
-    const startIndex = this.currentPage() * this.pageSize();
-    return filteredData.slice(startIndex, startIndex + this.pageSize());
-  }
-
-  getTotalPages(): number {
-    let data = this.isAccountsView() ? this.accounts() : this.profiles();
-
-    // Apply search filter for total count
-    if (this.searchTerm()) {
-      const term = this.searchTerm().toLowerCase();
-      data = data.filter(item =>
-        item.Name.toLowerCase().includes(term) ||
-        item.WhatsAppNumber.includes(term)
-      );
-    }
-
-    // Apply active/maintenance filter
-    switch (this.activeFilter()) {
-      case 'active':
-        data = data.filter(item => item.isActive);
-        break;
-      case 'maintenance':
-        data = data.filter(item => item.MaintenanceMessageEnabled);
-        break;
-      default:
-        break;
-    }
-
-    return Math.ceil(data.length / this.pageSize());
-  }
-
-  getTotalRecords(): number {
-    let data = this.isAccountsView() ? this.accounts() : this.profiles();
-
-    // Apply active/maintenance filter for total count
-    switch (this.activeFilter()) {
-      case 'active':
-        data = data.filter(item => item.isActive);
-        break;
-      case 'maintenance':
-        data = data.filter(item => item.MaintenanceMessageEnabled);
-        break;
-      default:
-        break;
-    }
-
-    return data.length;
-  }
-
-  getActiveCount(): number {
-    const data = this.isAccountsView() ? this.accounts() : this.profiles();
-    return data.filter(item => item.isActive).length;
-  }
-
-  getMaintenanceCount(): number {
-    const data = this.isAccountsView() ? this.accounts() : this.profiles();
-    return data.filter(item => item.MaintenanceMessageEnabled).length;
-  }
-
-  isFilterActive(filter: 'all' | 'active' | 'maintenance'): boolean {
-    return this.activeFilter() === filter;
+  // Placeholder for the "Delete" action in the menu
+  deleteBusiness(element: any) {
+    console.log('Delete requested for:', element.Name);
+    // Add your service call here later
   }
 }
