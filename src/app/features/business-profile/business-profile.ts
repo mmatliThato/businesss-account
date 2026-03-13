@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { TabNavigationComponent } from './tab-navigation.component';
 // 1. ADD THESE IMPORTS
-import { ActionBarComponent } from './action-bar.component'; 
+import { ActionBarComponent } from './action-bar.component';
 import { ProfileTableComponent } from './profile-table.component';
 
 @Component({
@@ -21,8 +21,8 @@ import { ProfileTableComponent } from './profile-table.component';
     MatFormFieldModule,
     MatSelectModule,
     TabNavigationComponent,
-    ActionBarComponent,    // 2. ADD TO THIS ARRAY
-    ProfileTableComponent   // 2. ADD TO THIS ARRAY
+    ActionBarComponent, // 2. ADD TO THIS ARRAY
+    ProfileTableComponent, // 2. ADD TO THIS ARRAY
   ],
   templateUrl: './business-profile.html',
   styleUrl: './business-profile.scss',

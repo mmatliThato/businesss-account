@@ -2,12 +2,9 @@
   <div class="home-container">
     <app-tab-navigation [currentTab]="currentTab()"></app-tab-navigation>
 
-    <app-action-bar
-      [searchQuery]="searchQuery()"
-      (searchChange)="handleSearch($event)"> </app-action-bar>
+    <app-action-bar [searchQuery]="searchQuery()" (searchChange)="handleSearch($event)">
+    </app-action-bar>
 
-    <app-profile-table
-      [searchQuery]="searchQuery()">
-    </app-profile-table>
+    <app-profile-table [searchQuery]="searchQuery()"> </app-profile-table>
   </div>
 </div>

@@ -1,20 +1,17 @@
 <div class="screen-container">
   <div class="content-frame">
-    
     <div class="page-header">
       <h1>Home</h1>
     </div>
 
-    <app-tab-navigation 
-      [currentTab]="currentTab()" 
-      (tabSelected)="currentTab.set($event)">
+    <app-tab-navigation [currentTab]="currentTab()" (tabSelected)="currentTab.set($event)">
     </app-tab-navigation>
 
     <div class="table-card">
       <div class="table-header-actions">
         <div class="search-input">
           <mat-icon>search</mat-icon>
-          <input type="text" placeholder="Search" (keyup)="applyFilter($event)">
+          <input type="text" placeholder="Search" (keyup)="applyFilter($event)" />
         </div>
 
         <div class="action-group">
@@ -31,33 +28,32 @@
       </div>
 
       <table mat-table [dataSource]="dataSource" class="premium-mat-table">
-        
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element" class="name-column"> {{element.Name}} </td>
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element" class="name-column">{{ element.Name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="accountId">
-          <th mat-header-cell *matHeaderCellDef> Account ID </th>
-          <td mat-cell *matCellDef="let element" class="mono-text"> {{element.Id}} </td>
+          <th mat-header-cell *matHeaderCellDef>Account ID</th>
+          <td mat-cell *matCellDef="let element" class="mono-text">{{ element.Id }}</td>
         </ng-container>
 
         <ng-container matColumnDef="whatsapp">
-          <th mat-header-cell *matHeaderCellDef> WhatsApp Number </th>
-          <td mat-cell *matCellDef="let element"> {{element.WhatsAppNumber}} </td>
+          <th mat-header-cell *matHeaderCellDef>WhatsApp Number</th>
+          <td mat-cell *matCellDef="let element">{{ element.WhatsAppNumber }}</td>
         </ng-container>
 
         <ng-container matColumnDef="phoneId">
-          <th mat-header-cell *matHeaderCellDef> Phone Number ID </th>
-          <td mat-cell *matCellDef="let element" class="mono-text"> {{element.PhoneNumberId}} </td>
+          <th mat-header-cell *matHeaderCellDef>Phone Number ID</th>
+          <td mat-cell *matCellDef="let element" class="mono-text">{{ element.PhoneNumberId }}</td>
         </ng-container>
 
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef> Status </th>
+          <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let element">
             <span class="status-badge" [class.active]="element.isActive">
               <span class="dot"></span>
-              {{element.isActive ? 'Active' : 'Inactive'}}
+              {{ element.isActive ? 'Active' : 'Inactive' }}
             </span>
           </td>
         </ng-container>
@@ -65,40 +61,26 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let element">
-            
             <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
               <mat-icon>more_vert</mat-icon>
             </button>
-            
-            <mat-menu #menu="matMenu" xPosition="before" class="custom-premium-menu">
+            <mat-menu #menu="matMenu" class="custom-menu">
               <button mat-menu-item (click)="navigateToDetails(element.Id)">
-                <mat-icon color="primary">visibility</mat-icon>
-                <span>View Details</span>
-              </button>
-              
-              <button mat-menu-item (click)="addProfile()">
-                <mat-icon>edit</mat-icon>
-                <span>Edit Profile</span>
-              </button>
-
-              <mat-divider></mat-divider>
-
-              <button mat-menu-item (click)="$event.stopPropagation()" style="color: #ef4444;">
-                <mat-icon style="color: #ef4444;">delete</mat-icon>
-                <span>Delete</span>
+                <mat-icon style="color: #0051ff">visibility</mat-icon>
+                <span style="color: #697786; font-family: 'Benton Sans Pro'">View Details</span>
               </button>
             </mat-menu>
-
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        
-        <tr mat-row 
-            *matRowDef="let row; columns: displayedColumns;" 
-            class="clickable-row"
-            (click)="navigateToDetails(row.Id)">
-        </tr>
+
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="clickable-row"
+          (click)="navigateToDetails(row.Id)"
+        ></tr>
       </table>
 
       <mat-paginator [pageSizeOptions]="[10, 15, 20]" aria-label="Select page"></mat-paginator>

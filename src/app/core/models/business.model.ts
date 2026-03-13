@@ -13,7 +13,7 @@ export interface ClientCallbackConfig {
 }
 
 export interface BusinessProfile extends BusinessAccount {
-  WabaAccountMetaData: string; // This is a JSON string in your mock
+  WabaAccountMetaData: string;
   MaintenanceMessageBody: string;
   MaintenanceMessageButtonText: string;
   MaintenanceMessageButtonUrl: string;

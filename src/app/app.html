@@ -1,11 +1,28 @@
 <div class="app-container">
   <header class="header">
-    <button class="sign-out-btn">SIGN OUT</button>
+    <div class="header-left">
+      @if (showBackButton()) {
+        <button class="back-link" (click)="goBack()">
+          <mat-icon>keyboard_backspace</mat-icon>
+          <span>Back</span>
+        </button>
+      } @else {
+        <div class="logo-wrapper">
+          <span class="brand-main">ADMIN</span>
+          <span class="brand-sub">PORTAL</span>
+        </div>
+      }
+    </div>
+
+    <button class="sign-out-btn">
+      <mat-icon>lock_outline</mat-icon>
+      <span class="sign-out-text">SIGN OUT</span>
+    </button>
   </header>
 
   <div class="main-body">
     <app-sidebar></app-sidebar>
-    
+
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>

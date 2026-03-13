@@ -1,17 +1,27 @@
-/* --- 1. FIGMA DESIGN TOKENS --- */
-$secondary-135: #003FCA;
-$neutral-pale-grey: #CED3D9;
+$secondary-135: #003fca;
+$secondary-blue: #0051ff;
+$neutral-pale-grey: #ced3d9;
 $neutral-light-grey-80: #697786;
-$neutral-white: #FFFFFF;
-$success-green: #E8F5E9;
-$success-text: #2E7D32;
-$error-red: #FFEBEE;
-$error-text: #C62828;
+$neutral-white: #ffffff;
+$bg-body: #f8f8fa;
+$success-green: #e8f5e9;
+$success-text: #2e7d32;
+$error-red: #ffebee;
+$error-text: #c62828;
+$font-main: 'Benton Sans Pro', sans-serif;
 
-/* --- 2. LAYOUT & HEADER --- */
+body {
+  margin: 0;
+  font-family: $font-main;
+  background-color: $bg-body;
+  color: #000000;
+  -webkit-font-smoothing: antialiased;
+}
+
 .content-frame {
-  width: 1280px; 
+  max-width: 1280px;
   margin: 0 auto;
+  padding: 0 20px;
 }
 
 .page-header {
@@ -23,21 +33,18 @@ $error-text: #C62828;
 
   h1 {
     margin: 0;
-    color: #000000;
-    font-family: 'Benton Sans Pro', sans-serif;
     font-size: 32px;
     font-weight: 500;
-    line-height: 130%;
+    line-height: 1.3;
   }
 }
 
-/* --- 3. TABLE CARD & ACTIONS --- */
 .table-card {
   background: $neutral-white;
   border: 1px solid $neutral-pale-grey;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
 }
 
 .table-header-actions {
@@ -46,56 +53,95 @@ $error-text: #C62828;
   align-items: center;
   height: 99px;
   padding: 0 24px;
-  background: #F8F8FA;
+  background: $bg-body;
   border-bottom: 1px solid $neutral-pale-grey;
+  gap: 24px;
 
   .search-input {
     display: flex;
     align-items: center;
-    width: 785px !important;
+    flex: 1;
+    max-width: 785px;
     height: 48px;
     background: $neutral-white;
     border: 1px solid $neutral-pale-grey;
     border-radius: 12px;
     padding: 0 16px;
-    input { flex: 1; border: none; outline: none; font-size: 16px; color: $neutral-light-grey-80; }
-    mat-icon { color: $neutral-light-grey-80; margin-right: 8px; }
+
+    input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: $neutral-light-grey-80;
+      background: transparent;
+      &::placeholder {
+        color: $neutral-pale-grey;
+      }
+    }
+
+    mat-icon {
+      color: $neutral-light-grey-80;
+      margin-right: 8px;
+    }
   }
 
-  /* Corrected Action Group Alignment */
   .action-group {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 10px;
+    flex-shrink: 0;
 
     .sort-btn {
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: $neutral-light-grey-80;
-      font-size: 14px;
+      justify-content: space-between;
+      width: 240px;
+      height: 48px;
+      padding: 0 17px;
+      background: $neutral-white;
+      border: 1px solid $neutral-pale-grey;
+      border-radius: 8px;
       cursor: pointer;
-    }
-  }
 
-  .add-btn {
-    width: 173px;
-    height: 48px;
-    background: $secondary-135;
-    color: $neutral-white;
-    border-radius: 8px;
-    border: none;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-transform: uppercase;
-    cursor: pointer;
+      span {
+        font-size: 16px;
+        color: $neutral-light-grey-80;
+      }
+
+      mat-icon {
+        color: $secondary-blue;
+        font-size: 20px;
+      }
+    }
+
+    .add-btn {
+      width: 173px;
+      height: 48px;
+      background: $secondary-135;
+      color: $neutral-white;
+      border-radius: 8px;
+      border: none;
+      font-family: $font-main;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: lighten($secondary-135, 5%);
+        box-shadow: 0 2px 8px rgba(0, 63, 202, 0.2);
+      }
+    }
   }
 }
 
-/* --- 4. STATUS BADGE STYLING --- */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -120,29 +166,59 @@ $error-text: #C62828;
   }
 }
 
-/* --- 5. THE STRICT PAGINATOR FIX --- */
-::ng-deep .mat-mdc-paginator {
-  background: $neutral-white !important;
-  border-top: 1px solid $neutral-pale-grey;
-
-  .mat-mdc-text-field-wrapper {
-    background-color: transparent !important;
-    padding: 0 !important;
+::ng-deep {
+  .mat-mdc-menu-panel {
+    min-width: 150px !important;
+    border: 1px solid $neutral-pale-grey !important;
+    border-radius: 8px !important;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05) !important;
   }
 
-  .mat-mdc-form-field-flex {
-    border-bottom: 2px solid $secondary-135 !important;
-    background: transparent !important;
+  .mat-mdc-menu-item {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 16px !important;
+    gap: 12px !important;
+
+    mat-icon {
+      font-size: 18px !important;
+      color: $secondary-blue !important;
+      margin: 0 !important;
+    }
   }
 
-  .mdc-line-ripple { display: none !important; }
+  .mat-mdc-paginator {
+    background: $neutral-white !important;
+    border-top: 1px solid $neutral-pale-grey;
 
-  .mat-mdc-select-value, .mat-mdc-select-arrow svg {
-    color: $secondary-135 !important;
-    fill: $secondary-135 !important;
+    .mat-mdc-form-field-flex {
+      border-bottom: 2px solid $secondary-135 !important;
+    }
+
+    .mat-mdc-select-value,
+    .mat-mdc-select-arrow svg,
+    .mat-mdc-paginator-navigation-next,
+    .mat-mdc-paginator-navigation-previous {
+      color: $secondary-135 !important;
+      fill: $secondary-135 !important;
+    }
   }
+}
 
-  .mat-mdc-paginator-navigation-next, .mat-mdc-paginator-navigation-previous {
-    color: $secondary-135 !important;
+@media (max-width: 1024px) {
+  .table-header-actions {
+    flex-direction: column;
+    height: auto;
+    padding: 20px;
+    gap: 16px;
+
+    .search-input {
+      max-width: 100%;
+      width: 100%;
+    }
+    .action-group {
+      width: 100%;
+      justify-content: space-between;
+    }
   }
 }

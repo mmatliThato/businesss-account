@@ -10,62 +10,61 @@ import { CommonModule } from '@angular/common';
       <button
         class="tab-button"
         [class.active]="currentTab === 'profile'"
-        (click)="onTabChange('profile')">
+        (click)="onTabChange('profile')"
+      >
         Business Profile
       </button>
-      <button
-        class="tab-button"
-        [class.active]="currentTab === 'templates'"
-        (click)="onTabChange('templates')">
-        Message Templates
-      </button>
+      <button class="tab-button disabled">Message Templates</button>
     </div>
   `,
-  styles: [`
-    .tab-container {
-      display: flex;
-      gap: 32px; /* Increased gap to match Figma spacing */
-      margin-bottom: 24px;
-      border-bottom: 1px solid #CED3D9; /* Light grey bottom border for the full row */
-      width: 1280px; /* Matching the 1280px layout width */
-    }
+  styles: [
+    `
+      .tab-container {
+        display: flex;
+        gap: 32px;
+        margin-bottom: 24px;
+        /* REMOVED: border-bottom: 1px solid #CED3D9; */
+        width: 1280px;
+      }
 
-    .tab-button {
-      background: none;
-      border: none;
-      padding: 12px 0; /* Vertical padding only */
-      font-family: 'Benton Sans Pro', sans-serif;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 130%;
-      color: #697786; /* Neutral grey for inactive tabs */
-      cursor: pointer;
-      position: relative;
-      transition: color 0.2s ease;
-      outline: none;
-    }
+      .tab-button {
+        background: none;
+        border: none;
+        padding: 12px 0;
+        font-family: 'Benton Sans Pro', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 130%;
+        color: #697786;
+        cursor: pointer;
+        position: relative;
+        outline: none;
+      }
 
-    .tab-button:hover {
-      color: #003FCA;
-    }
+      .tab-button.active {
+        color: #0051ff;
+        font-weight: 600;
+      }
 
-    .tab-button.active {
-      color: #003FCA; /* Precise Figma secondary blue */
-      font-weight: 600;
-    }
+      /* This creates the blue underline only under the active text */
+      .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #0051ff;
+        border-radius: 2px 2px 0 0;
+      }
 
-    /* Figma-style indicator line */
-    .tab-button.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px; /* Overlap the container border */
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: #003FCA;
-      border-radius: 2px 2px 0 0;
-    }
-  `],
+      .tab-button.disabled {
+        cursor: default;
+        color: #b0b8c1;
+        pointer-events: none;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabNavigationComponent {
@@ -73,7 +72,7 @@ export class TabNavigationComponent {
   @Output() tabSelected = new EventEmitter<'profile' | 'templates'>();
 
   onTabChange(tab: 'profile' | 'templates') {
-    if (this.currentTab !== tab) {
+    if (this.currentTab !== tab && tab === 'profile') {
       this.tabSelected.emit(tab);
     }
   }

@@ -1,11 +1,11 @@
-import { 
-  Component, 
-  inject, 
-  signal, 
-  ViewChild, 
-  AfterViewInit, 
-  effect, 
-  ChangeDetectionStrategy 
+import {
+  Component,
+  inject,
+  signal,
+  ViewChild,
+  AfterViewInit,
+  effect,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router'; // Removed RouterLink since we use (click)
@@ -17,7 +17,7 @@ import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';      // Added for three-dots menu
+import { MatMenuModule } from '@angular/material/menu'; // Added for three-dots menu
 import { MatDividerModule } from '@angular/material/divider'; // Added for menu separator
 import { TabNavigationComponent } from '../business-profile/tab-navigation.component';
 
@@ -25,15 +25,15 @@ import { TabNavigationComponent } from '../business-profile/tab-navigation.compo
   selector: 'app-business-list',
   standalone: true,
   imports: [
-    CommonModule, 
-    SharedModule, 
+    CommonModule,
+    SharedModule,
     TabNavigationComponent,
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule,    // Necessary for [matMenuTriggerFor]
-    MatDividerModule  // Necessary for <mat-divider>
+    MatMenuModule, // Necessary for [matMenuTriggerFor]
+    MatDividerModule, // Necessary for <mat-divider>
   ],
   templateUrl: './business-list.html',
   styleUrl: './business-list.scss',
@@ -42,17 +42,17 @@ import { TabNavigationComponent } from '../business-profile/tab-navigation.compo
 export class BusinessList implements AfterViewInit {
   private businessService = inject(BusinessService);
   private router = inject(Router);
-  
+
   // Data State from Service
   loading = this.businessService.loading;
-  
+
   // Material Table Setup
   dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['name', 'accountId', 'whatsapp', 'phoneId', 'status', 'actions'];
 
   // UI State
   currentTab = signal<'profile' | 'templates'>('profile');
-  
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor() {

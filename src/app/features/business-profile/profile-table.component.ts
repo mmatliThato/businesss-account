@@ -11,12 +11,12 @@ import { BusinessProfile } from '../../core/models/business.model';
   selector: 'app-profile-table',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatTableModule, 
-    MatPaginatorModule, 
-    MatIconModule, 
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
     MatButtonModule,
-    MatProgressSpinnerModule // Fixed: Added to imports
+    MatProgressSpinnerModule, // Fixed: Added to imports
   ],
   templateUrl: './profile-table.component.html',
   styleUrls: ['./profile-table.component.scss'], // Note: Ensure this file exists!
@@ -35,7 +35,7 @@ export class ProfileTableComponent {
     'whatsappNumber',
     'maintenanceMessageEnabled',
     'isActive',
-    'actions'
+    'actions',
   ];
 
   @Output() refresh = new EventEmitter<void>();

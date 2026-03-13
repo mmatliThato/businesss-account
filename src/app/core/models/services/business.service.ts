@@ -8,7 +8,6 @@ export class BusinessService {
   private http = inject(HttpClient);
   private baseUrl = 'https://2fbf680e-be98-49d0-9bd2-d04d1fee94cf.mock.pstmn.io';
 
-  // Signals for state management
   accounts = signal<BusinessAccount[]>([]);
   profiles = signal<BusinessProfile[]>([]);
   loading = signal<boolean>(false);

@@ -1,126 +1,99 @@
-# Senior Angular Front-End Developer Assessment
+ Admin Portal - MAP
 
-This is my submission for the **Senior Angular Front-End Developer** technical assessment.
+A high-performance management interface built with Angular 21.
+This portal is designed for a **professional, Figma-accurate user experience** using modern reactive patterns and scalable frontend architecture.
 
-## 📋 Overview
+Tech Stack
 
-A production-ready Angular application that recreates two screens from the Figma design and integrates with provided API endpoints. The application demonstrates senior-level Angular patterns, clean architecture, and attention to UI/UX details.
+Framework**: Angular 21 (using Signals for reactive state management)
+UI Components**: Angular Material
+Code Quality**: ESLint + Prettier
 
-## ✅ Requirements Completed
+---
 
-### Core Features
-- ✅ **Two screens** recreated: Business Accounts & Business Profiles
-- ✅ **API integration**: Consumes `/business-accounts` and `/business-profiles` endpoints
-- ✅ **Angular 18+** with standalone components
-- ✅ **SCSS styling** with responsive design
+Key Features
 
-### Production-Ready Patterns
-- ✅ Feature modules (`SharedModule`)
-- ✅ OnPush change detection strategy
-- ✅ Strong typing (no `any`)
-- ✅ Reusable components library
-- ✅ Error handling & loading states
-- ✅ Responsive layouts
+Figma-Aligned Tables
 
-### UI/UX Implementation
-- ✅ Statistics dashboard with real-time counts
-- ✅ Search functionality with filtering
-- ✅ Pagination controls
-- ✅ Filter chips (All/Active/Maintenance)
-- ✅ Status badges (green for active, red for inactive)
+Custom-styled tables built to match design specifications including:
 
-## 🚀 Getting Started
+Header typography
+Row heights
+Column spacing
+Hover interactions
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-- Angular CLI
+Ensures the UI is **pixel-accurate to the Figma design system**.
+
+---
+
+Kebab Menu (Overflow Menu)
+
+Each row includes a  action menu** that keeps the interface clean while allowing additional actions.
+
+Available actions include:
+
+View Details**
+
+This prevents UI clutter while maintaining full functionality.
+
+---
+
+### Smart Navigation
+
+Selecting **"View Details"** from the Kebab Menu navigates to the **specific business profile page**.
+
+This keeps the main table simple while providing detailed access when needed.
+
+
+
+Clean Code Architecture
+
+The project is structured with maintainability in mind:
+
+Angular **Signals** for reactive state
+ Modular components
+Linting and formatting tools
+Consistent UI patterns
+
+
+Getting Started
 
 ### Installation
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### Running the Application
+### Start Development Server
 
 ```bash
-ng serve --open
+npm run start
 ```
 
-The application will be available at `http://localhost:4200/`
+The application will run at:
 
-### Building for Production
+```
+http://localhost:4200/
+```
+
+---
+
+
+### Format and Lint Code
 
 ```bash
-ng build --configuration production
+npm run clean-code
 ```
 
-## 📡 API Configuration
+ Design
 
-The application uses a mock server via Postman. The base URL is configured in `src/app/core/models/services/business.service.ts`:
+The UI implementation follows Figma design specifications to ensure a consistent and professional interface.
 
-```typescript
-private apiUrl = 'https://2fb680e-be98-49d0-9ud2-d041fe94cf.mock.pstmn.io';
-```
+Key design goals:
+Pixel-accurate components
+Consistent spacing
+Clear hierarchy
 
-## 🎨 Design Notes
 
-### Color Scheme
-- **Primary**: Standard Bank blue (#003d82)
-- **Secondary**: Vibrant blue (#0072c6) for active states
-- **Accent**: Gold (#ffd700) for highlights
-- **Backgrounds**: White with dark text for readability
-
-### Figma Design
-The application follows the Figma design at:
-https://www.figma.com/design/xbr01bhlNQVQWEijTheXCw/Hi-fi-MAP--Vincent-?node-id=0-1&t=iiehBiq7LvaFCyEb-1
-Password: Map@2026
-
-## 📦 Technology Stack
-
-| Technology | Version |
-|-----------|--------|
-| Angular | 18.0.0 |
-| TypeScript | 5.4.5 |
-| SCSS | Native |
-| Angular Material | Latest |
-| RxJS | Latest |
-
-## 🔧 Architecture
-
-### Folder Structure
-```
-src/app/
-├── core/               # Core services and models
-│   ├── models/         # Data models and interfaces
-│   └── services/       # API services
-├── features/           # Feature modules
-│   ├── business-list/  # Business Accounts screen
-│   └── business-details/# Business Profiles screen
-└── shared/            # Reusable components
-    └── components/     # Shared UI components
-```
-
-### Key Patterns
-- **Standalone Components**: Angular 18+ standalone approach
-- **Signals**: For reactive state management
-- **OnPush**: Change detection optimization
-- **Feature Modules**: Logical separation of concerns
-
-## 📝 Assumptions
-
-1. The mock API returns all businesses as inactive (`isActive: false`). This is expected behavior based on the provided OpenAPI specification.
-2. Figma design uses Standard Bank's official corporate colors (blue/gold scheme).
-3. No authentication required per assessment instructions.
-
-## 🎯 Bonus Features Implemented
-
-- ✅ Angular Signals for state management
-- ✅ Reusable component library structure
-- ✅ Angular Material integration
-- ✅ Shared components with proper encapsulation
-
-## 📞 Support
-
-For any questions about this submission, please contact me directly.

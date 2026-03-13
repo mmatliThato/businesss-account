@@ -1,25 +1,17 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
 import { BusinessService } from '../../core/models/services/business.service';
 import { BusinessAccount, BusinessProfile } from '../../core/models/business.model';
-import { TabNavigationComponent } from '../business-profile/tab-navigation.component';
+import { ActivatedRoute } from '@angular/router'; // Removed RouterLink to fix warning
+import { CommonModule } from '@angular/common';
+import { SharedModule } from '../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-business-details',
   standalone: true,
-  imports: [
-    CommonModule, 
-    RouterLink, 
-    FormsModule, 
-    MatIconModule, 
-    MatSlideToggleModule, 
-    TabNavigationComponent
-  ],
+  imports: [CommonModule, SharedModule, FormsModule, MatSlideToggleModule, MatRadioModule],
   templateUrl: './business-details.html',
   styleUrl: './business-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,101 +20,121 @@ export class BusinessDetails {
   private businessService = inject(BusinessService);
   private route = inject(ActivatedRoute);
 
-  // State Management
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
-  currentTab = signal<'profile' | 'templates'>('profile');
-  
-  // Data Storage
   account = signal<BusinessAccount | null>(null);
   profile = signal<BusinessProfile | null>(null);
   isAccount = signal<boolean>(true);
+  id = signal<string>('');
 
-  // Form Signals (Figma Set-up API Section)
-  apiName = signal<string>('Populated');
-  description = signal<string>('');
+  // API Settings Form Signals
+  apiName = signal<string>(''); // Added: Missing from template error
   apiEnvironment = signal<'development' | 'production'>('development');
-  
-  // API Settings Section
   replyCallbackEnabled = signal<boolean>(false);
-  deliveryNotificationEnabled = signal<boolean>(false);
   apiAddress = signal<string>('');
   clientSecret = signal<string>('');
-  scope = signal<string>('');
 
   constructor() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadDetails(id);
-    }
+    const id = this.route.snapshot.paramMap.get('id') || '';
+    this.id.set(id);
+    this.loadDetails(id);
+  }
+
+  onUpdate(): void {
+    console.log('Update payload:', {
+      id: this.id(),
+      name: this.apiName(),
+      environment: this.apiEnvironment(),
+      address: this.apiAddress(),
+      callback: this.replyCallbackEnabled(),
+    });
+  }
+
+  toggleReplyCallback(): void {
+    this.replyCallbackEnabled.update((val) => !val);
+  }
+
+  getAccountId(): string {
+    return this.id();
   }
 
   loadDetails(id: string) {
     this.loading.set(true);
-    
-    // Attempt to find data in the existing service state
-    const accountData = this.businessService.accounts().find(a => a.Id === id);
-    const profileData = this.businessService.profiles().find(p => p.Id === id);
+    this.error.set(null);
 
-    if (accountData) {
+    const account = this.businessService.accounts().find((a: BusinessAccount) => a.Id === id);
+    if (account) {
       this.isAccount.set(true);
-      this.account.set(accountData);
+      this.account.set(account);
+      this.apiName.set(account.Name || ''); // Initialize form name
       this.loading.set(false);
-    } else if (profileData) {
-      this.isAccount.set(false);
-      this.profile.set(profileData);
-      this.syncFormData(profileData);
-      this.loading.set(false);
-    } else {
-      this.fetchFromApi(id);
+      return;
     }
-  }
 
-  // Syncs incoming data to the editable form signals
-  private syncFormData(data: BusinessProfile) {
-    this.apiAddress.set(data.ApiAddress || '');
-    this.clientSecret.set(data.ClientSecret || '');
-    this.replyCallbackEnabled.set(data.ReplyCallbackEnabled || false);
+    const profile = this.businessService.profiles().find((p: BusinessProfile) => p.Id === id);
+    if (profile) {
+      this.isAccount.set(false);
+      this.profile.set(profile);
+
+      // Initialize form with existing data
+      this.apiName.set(profile.Name || '');
+      this.apiAddress.set(profile.ApiAddress || '');
+      this.clientSecret.set(profile.ClientSecret || '');
+      this.replyCallbackEnabled.set(profile.ReplyCallbackEnabled || false);
+      this.loading.set(false);
+      return;
+    }
+
+    this.fetchFromApi(id);
   }
 
   private fetchFromApi(id: string) {
-    this.businessService.fetchProfiles().subscribe({
-      next: () => this.loadDetails(id),
-      error: () => {
-        this.error.set('Details not found');
-        this.loading.set(false);
-      }
-    });
+    const hasAccounts = this.businessService.accounts().length > 0;
+    const hasProfiles = this.businessService.profiles().length > 0;
+
+    if (!hasAccounts && !hasProfiles) {
+      this.businessService.fetchAccounts().subscribe({
+        error: () => {
+          this.error.set('Failed to load data.');
+          this.loading.set(false);
+        },
+      });
+      this.businessService.fetchProfiles().subscribe({
+        error: () => {
+          this.error.set('Failed to load data.');
+          this.loading.set(false);
+        },
+        complete: () => {
+          this.loadDetails(id);
+        },
+      });
+    } else if (!hasProfiles) {
+      this.businessService.fetchProfiles().subscribe({
+        error: () => {
+          this.error.set('Failed to load data.');
+          this.loading.set(false);
+        },
+        complete: () => {
+          this.loadDetails(id);
+        },
+      });
+    } else {
+      this.error.set('Business not found');
+      this.loading.set(false);
+    }
   }
 
-  // --- UI Helpers (Used in HTML) ---
-
   getDisplayName(): string {
-    return (this.isAccount() ? this.account()?.Name : this.profile()?.Name) || 'Unknown';
+    return this.isAccount() ? this.account()?.Name || '' : this.profile()?.Name || '';
   }
 
   getWhatsAppNumber(): string {
-    return (this.isAccount() ? this.account()?.WhatsAppNumber : this.profile()?.WhatsAppNumber) || '—';
-  }
-
-  getAccountId(): string {
-    return (this.isAccount() ? this.account()?.Id : this.profile()?.Id) || '—';
-  }
-
-  getPhoneId(): string {
-    return (this.isAccount() ? this.account()?.PhoneNumberId : this.profile()?.PhoneNumberId) || '—';
+    return this.isAccount()
+      ? this.account()?.WhatsAppNumber || ''
+      : this.profile()?.WhatsAppNumber || '';
   }
 
   getStatus(): boolean {
-    return (this.isAccount() ? this.account()?.isActive : this.profile()?.isActive) || false;
-  }
-
-  onUpdate() {
-    console.log('Updating API Settings:', {
-      env: this.apiEnvironment(),
-      address: this.apiAddress(),
-      secret: this.clientSecret()
-    });
-    // Logic to call your BusinessService update method goes here
+    return this.isAccount() ? this.account()?.isActive || false : this.profile()?.isActive || false;
   }
 }

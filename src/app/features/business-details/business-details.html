@@ -1,123 +1,177 @@
-<div class="screen-container">
-  <div class="side-nav">
-    <button class="back-link" [routerLink]="['/business-accounts']">
-      <mat-icon>keyboard_backspace</mat-icon>
-      <span>Back</span>
-    </button>
-  </div>
-
-  <div class="content-frame">
-    <div class="page-header">
-      <h1>Business Profile</h1>
-      <button class="update-btn">UPDATE</button>
+<div class="content-frame">
+  @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+      <button (click)="loadDetails(id())" class="retry-button">Retry</button>
     </div>
+  }
 
-    <app-tab-navigation 
-      [currentTab]="currentTab()" 
-      (tabSelected)="currentTab.set($event)">
-    </app-tab-navigation>
+  @if (loading()) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      Loading details...
+    </div>
+  } @else if (!error() && (account() || profile())) {
+    <div class="header-container">
+      <h1 class="business-profile-title">Business Profile</h1>
 
-    <div class="tab-content">
-      @if (currentTab() === 'profile') {
-        <div class="profile-grid">
-          
-          <div class="left-col">
-            <div class="details-card">
-              <div class="card-title-row">
-                <h3>Profile Details</h3>
-                <span class="status-badge" [class.active]="getStatus()">
-                  <span class="dot"></span> {{ getStatus() ? 'Active' : 'Inactive' }}
-                </span>
-              </div>
-              
-              <div class="info-group">
-                <label>Display name</label>
-                <p>{{ getDisplayName() }}</p>
-              </div>
-              <div class="info-group">
-                <label>WhatsApp number</label>
-                <p>{{ getWhatsAppNumber() }}</p>
-              </div>
-              <div class="info-group">
-                <label>Date created</label>
-                <p>12/03/2026</p>
-              </div>
-            </div>
-
-            <div class="details-card api-summary">
-              <h3>API Details</h3>
-              <div class="info-group">
-                <label>API name</label>
-                <p>Populated</p>
-              </div>
-              <div class="info-group">
-                <label>API key</label>
-                <p class="mono">••••••••••••••••</p>
-              </div>
-              <div class="info-group">
-                <label>API ID</label>
-                <p class="mono">{{ getAccountId() }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="right-col">
-            <div class="form-card">
-              <h3>Set-up API</h3>
-              
-              <div class="input-field">
-                <label>API name</label>
-                <input type="text" placeholder="Populated">
-              </div>
-
-              <div class="input-field">
-                <label>Description</label>
-                <input type="text" placeholder="Short description">
-              </div>
-
-              <div class="env-selector">
-                <label class="radio-item">
-                  <input type="radio" name="env" value="development" [checked]="apiEnvironment() === 'development'">
-                  <span>Development</span>
-                </label>
-                <label class="radio-item">
-                  <input type="radio" name="env" value="production" [checked]="apiEnvironment() === 'production'">
-                  <span>Production</span>
-                </label>
-              </div>
-
-              <hr class="divider">
-
-              <h3>API Settings</h3>
-              
-              <div class="setting-row">
-                <div class="setting-text">
-                  <label>Reply callback</label>
-                  <span>Specify callback return method</span>
-                </div>
-                <mat-slide-toggle color="primary"></mat-slide-toggle>
-              </div>
-
-              <div class="input-field">
-                <label>Address</label>
-                <input type="text" [ngModel]="apiAddress()" placeholder="API address">
-              </div>
-
-              <div class="dual-inputs">
-                <div class="input-field">
-                  <label>Client secret</label>
-                  <input type="text" placeholder="Label">
-                </div>
-                <div class="input-field">
-                  <label>Scope</label>
-                  <input type="text" placeholder="Label">
-                </div>
-              </div>
-            </div>
-          </div>
-
+      <button class="primary-update-btn">
+        <div class="icon-container">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M3 17.25V21H6.75L17.81 9.94L14.06 6.19L3 17.25ZM20.71 7.04C21.1 6.65 21.1 6.02 20.71 5.63L18.37 3.29C17.98 2.9 17.35 2.9 16.96 3.29L15.13 5.12L18.88 8.87L20.71 7.04Z"
+              fill="white"
+            />
+          </svg>
         </div>
-      }
+        <span>UPDATE</span>
+      </button>
     </div>
-  </div>
+
+    <div class="profile-grid">
+      <div class="left-col">
+        <section class="info-card accent-purple">
+          <div class="card-title-row">
+            <h3>Profile Details</h3>
+            <span class="status-pill" [class.active]="getStatus()">
+              <span class="dot"></span> {{ getStatus() ? 'Active' : 'Inactive' }}
+            </span>
+          </div>
+
+          <div class="data-field">
+            <label>Display name</label>
+            <p>{{ getDisplayName() }}</p>
+          </div>
+          <div class="data-field">
+            <label>WhatsApp number</label>
+            <p>{{ getWhatsAppNumber() }}</p>
+          </div>
+          <div class="data-field">
+            <label>Date created</label>
+            <p>12/03/2026</p>
+          </div>
+        </section>
+
+        <section class="info-card accent-blue">
+          <h3>API Details</h3>
+          <div class="data-field">
+            <label>API name</label>
+            <p>Populated</p>
+          </div>
+          <div class="data-field">
+            <label>Setup type</label>
+            <p>{{ apiEnvironment() }}</p>
+          </div>
+          <div class="data-field">
+            <label>API key</label>
+            <p class="code-font">••••••••••••••••</p>
+          </div>
+          <div class="data-field">
+            <label>API ID</label>
+            <p class="code-font small-id">{{ getAccountId() }}</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="right-col">
+        <div class="form-card">
+          <h3 class="form-main-title">Set-up API</h3>
+
+          <div class="input-group">
+            <label>API name</label>
+            <input type="text" placeholder="Populated" class="base-input" />
+          </div>
+
+          <div class="input-group">
+            <label>Description</label>
+            <input type="text" placeholder="short description" class="base-input" />
+          </div>
+
+          <div class="input-group">
+            <label>WhatsApp number</label>
+            <input type="text" placeholder="27761115555" class="base-input" />
+          </div>
+
+          <div class="radio-row">
+            <mat-radio-group
+              color="primary"
+              [ngModel]="apiEnvironment()"
+              (ngModelChange)="apiEnvironment.set($event)"
+            >
+              <mat-radio-button value="development">Development</mat-radio-button>
+              <mat-radio-button value="production">Production</mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <hr class="divider" />
+
+          <h3 class="section-heading">API Settings</h3>
+
+          <div class="settings-sub-section">
+            <div class="flex-toggle-row">
+              <div class="toggle-text">
+                <label>Reply callback</label>
+                <small>Specify callback return method</small>
+              </div>
+              <mat-slide-toggle
+                color="primary"
+                [ngModel]="replyCallbackEnabled()"
+                (ngModelChange)="replyCallbackEnabled.set($event)"
+              ></mat-slide-toggle>
+            </div>
+
+            <div class="input-group wide">
+              <label>Address</label>
+              <input type="text" placeholder="API address" class="base-input" />
+            </div>
+
+            <div class="input-split">
+              <div class="input-group">
+                <label>Client secret</label>
+                <input type="text" placeholder="Label" class="base-input" />
+              </div>
+              <div class="input-group">
+                <label>Scope</label>
+                <input type="text" placeholder="Label" class="base-input" />
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-sub-section">
+            <div class="flex-toggle-row">
+              <div class="toggle-text">
+                <label>Delivery notification</label>
+                <small>Specify delivery notification return method</small>
+              </div>
+              <mat-slide-toggle color="primary" [checked]="true"></mat-slide-toggle>
+            </div>
+
+            <div class="input-group wide">
+              <label>Address</label>
+              <input type="text" placeholder="API address" class="base-input" />
+            </div>
+
+            <div class="input-split">
+              <div class="input-group">
+                <label>Client secret</label>
+                <input type="text" placeholder="Label" class="base-input" />
+              </div>
+              <div class="input-group">
+                <label>Scope</label>
+                <input type="text" placeholder="Label" class="base-input" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="no-data">No details available for this business.</div>
+  }
 </div>

@@ -34,7 +34,7 @@ import { ErrorMessageComponent } from './components/error-message.component';
     MatInputModule,
     StatusBadgeComponent,
     LoadingSpinnerComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
   ],
   exports: [
     CommonModule,
@@ -52,7 +52,7 @@ import { ErrorMessageComponent } from './components/error-message.component';
     MatInputModule,
     StatusBadgeComponent,
     LoadingSpinnerComponent,
-    ErrorMessageComponent
-  ]
+    ErrorMessageComponent,
+  ],
 })
 export class SharedModule {}
