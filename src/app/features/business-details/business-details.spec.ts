@@ -12,7 +12,7 @@ describe('BusinessDetails', () => {
     await TestBed.configureTestingModule({
       imports: [BusinessDetails],
       providers: [
-        provideRouter([]), // This fixes the ActivatedRoute error
+        provideRouter([]), 
         { 
           provide: BusinessService, 
           useValue: { getBusinessById: () => of({}), currentBusiness: () => ({}) } 
