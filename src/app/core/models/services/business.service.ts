@@ -1,6 +1,6 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { BusinessAccount, BusinessProfile } from '../business.model';
 
 @Injectable({ providedIn: 'root' })
@@ -12,23 +12,23 @@ export class BusinessService {
   profiles = signal<BusinessProfile[]>([]);
   loading = signal<boolean>(false);
 
-  fetchAccounts() {
+  fetchAccounts(): Observable<BusinessAccount[]> {
     this.loading.set(true);
     return this.http.get<BusinessAccount[]>(`${this.baseUrl}/business-accounts`).pipe(
       tap((data) => {
-        this.accounts.set(data);
+        this.accounts.set(data); // Updates signal to fix "0 of 0"
         this.loading.set(false);
-      }),
+      })
     );
   }
 
-  fetchProfiles() {
+  fetchProfiles(): Observable<BusinessProfile[]> {
     this.loading.set(true);
     return this.http.get<BusinessProfile[]>(`${this.baseUrl}/business-profiles`).pipe(
       tap((data) => {
-        this.profiles.set(data);
+        this.profiles.set(data); // Updates signal to fix "0 of 0"
         this.loading.set(false);
-      }),
+      })
     );
   }
 }

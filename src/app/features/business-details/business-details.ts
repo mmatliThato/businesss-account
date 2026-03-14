@@ -1,7 +1,7 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { BusinessService } from '../../core/models/services/business.service';
 import { BusinessAccount, BusinessProfile } from '../../core/models/business.model';
-import { ActivatedRoute } from '@angular/router'; // Removed RouterLink to fix warning
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,13 @@ import { MatRadioModule } from '@angular/material/radio';
 @Component({
   selector: 'app-business-details',
   standalone: true,
-  imports: [CommonModule, SharedModule, FormsModule, MatSlideToggleModule, MatRadioModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FormsModule,
+    MatSlideToggleModule,
+    MatRadioModule
+  ],
   templateUrl: './business-details.html',
   styleUrl: './business-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,13 +28,14 @@ export class BusinessDetails {
 
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
+
   account = signal<BusinessAccount | null>(null);
   profile = signal<BusinessProfile | null>(null);
+
   isAccount = signal<boolean>(true);
   id = signal<string>('');
 
-  // API Settings Form Signals
-  apiName = signal<string>(''); // Added: Missing from template error
+  apiName = signal<string>('');
   apiEnvironment = signal<'development' | 'production'>('development');
   replyCallbackEnabled = signal<boolean>(false);
   apiAddress = signal<string>('');
@@ -62,25 +69,27 @@ export class BusinessDetails {
     this.loading.set(true);
     this.error.set(null);
 
-    const account = this.businessService.accounts().find((a: BusinessAccount) => a.Id === id);
+    const account = this.businessService.accounts().find(a => a.Id === id);
+
     if (account) {
       this.isAccount.set(true);
       this.account.set(account);
-      this.apiName.set(account.Name || ''); // Initialize form name
+      this.apiName.set(account.Name || '');
       this.loading.set(false);
       return;
     }
 
-    const profile = this.businessService.profiles().find((p: BusinessProfile) => p.Id === id);
+    const profile = this.businessService.profiles().find(p => p.Id === id);
+
     if (profile) {
       this.isAccount.set(false);
       this.profile.set(profile);
 
-      // Initialize form with existing data
       this.apiName.set(profile.Name || '');
       this.apiAddress.set(profile.ApiAddress || '');
       this.clientSecret.set(profile.ClientSecret || '');
       this.replyCallbackEnabled.set(profile.ReplyCallbackEnabled || false);
+
       this.loading.set(false);
       return;
     }
@@ -92,40 +101,23 @@ export class BusinessDetails {
     const hasAccounts = this.businessService.accounts().length > 0;
     const hasProfiles = this.businessService.profiles().length > 0;
 
-    if (!hasAccounts && !hasProfiles) {
-      this.businessService.fetchAccounts().subscribe({
-        error: () => {
-          this.error.set('Failed to load data.');
-          this.loading.set(false);
-        },
-      });
-      this.businessService.fetchProfiles().subscribe({
-        error: () => {
-          this.error.set('Failed to load data.');
-          this.loading.set(false);
-        },
-        complete: () => {
-          this.loadDetails(id);
-        },
-      });
-    } else if (!hasProfiles) {
-      this.businessService.fetchProfiles().subscribe({
-        error: () => {
-          this.error.set('Failed to load data.');
-          this.loading.set(false);
-        },
-        complete: () => {
-          this.loadDetails(id);
-        },
-      });
-    } else {
-      this.error.set('Business not found');
-      this.loading.set(false);
+    if (!hasAccounts) {
+      this.businessService.fetchAccounts();
     }
+
+    if (!hasProfiles) {
+      this.businessService.fetchProfiles();
+    }
+
+    setTimeout(() => {
+      this.loadDetails(id);
+    }, 500);
   }
 
   getDisplayName(): string {
-    return this.isAccount() ? this.account()?.Name || '' : this.profile()?.Name || '';
+    return this.isAccount()
+      ? this.account()?.Name || ''
+      : this.profile()?.Name || '';
   }
 
   getWhatsAppNumber(): string {
@@ -135,6 +127,8 @@ export class BusinessDetails {
   }
 
   getStatus(): boolean {
-    return this.isAccount() ? this.account()?.isActive || false : this.profile()?.isActive || false;
+    return this.isAccount()
+      ? this.account()?.isActive || false
+      : this.profile()?.isActive || false;
   }
 }
