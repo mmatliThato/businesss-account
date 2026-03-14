@@ -42,9 +42,14 @@
   .info-card,
   .form-card {
     background: #ffffff;
+
+    
     border: 1px solid #ced3d9;
     border-radius: 12px;
-    padding: 24px;
+padding: 32px;   
+gap: 10px; 
+display: flex;
+  flex-direction: column; 
   }
 
   .left-col {
@@ -54,12 +59,11 @@
 
     .info-card {
       &.accent-purple {
-        border-left: 6px solid #4318ff;
+        border-left: 4px solid #4318ff;
       }
       &.accent-blue {
-        border-left: 6px solid #39b8ff;
+        border-left: 4px solid #39b8ff;
       }
-
       h3 {
         margin: 0 0 20px 0;
         font-size: 16px;
@@ -71,6 +75,7 @@
         display: flex;
         align-items: center;
         margin-bottom: 16px;
+        
 
         label {
           width: 130px;

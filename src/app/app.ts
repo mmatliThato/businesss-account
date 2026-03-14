@@ -23,8 +23,6 @@ import { SidebarComponent } from './shared/components/sidebar.component';
   imports: [
     CommonModule,
     RouterOutlet,
-    // RouterLink,
-    // RouterLinkActive,
     MatIconModule,
     MatButtonModule,
     MatToolbarModule,

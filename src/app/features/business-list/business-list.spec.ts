@@ -87,4 +87,91 @@ describe('BusinessList', () => {
     component.navigateToDetails('123');
     expect(router.navigate).toHaveBeenCalledWith(['/business-details', '123']);
   });
+
+  it('should sort profiles A-Z by default', () => {
+    service._profiles = [
+      { id: '2', name: 'b', isActive: true },
+      { id: '1', name: 'A', isActive: false },
+    ];
+    fixture = TestBed.createComponent(BusinessList);
+    component = fixture.componentInstance;
+
+    const names = component.dataSource.data.map((d: any) => d.name);
+    expect(names).toEqual(['A', 'b']);
+  });
+
+  it('should reverse sort order when toggleSort is called (Z-A)', () => {
+    service._profiles = [
+      { id: '1', name: 'Alpha', isActive: true },
+      { id: '2', name: 'beta', isActive: false },
+      { id: '3', name: 'Charlie', isActive: true },
+    ];
+    fixture = TestBed.createComponent(BusinessList);
+    component = fixture.componentInstance;
+
+    // Default A-Z
+    let names = component.dataSource.data.map((d: any) => d.name);
+    expect(names).toEqual(['Alpha', 'beta', 'Charlie']);
+
+    // Toggle to Z-A
+    component.toggleSort();
+    names = component.dataSource.data.map((d: any) => d.name);
+    expect(names).toEqual(['Charlie', 'beta', 'Alpha']);
+  });
+
+  it('should filter profiles by status "active"', () => {
+    service._profiles = [
+      { id: '1', name: 'Active One', isActive: true },
+      { id: '2', name: 'Inactive One', isActive: false },
+      { id: '3', name: 'Active Two', isActive: true },
+    ];
+    fixture = TestBed.createComponent(BusinessList);
+    component = fixture.componentInstance;
+
+    component.setStatusFilter('active');
+
+    const data = component.dataSource.data as any[];
+    expect(data.every(d => d.isActive === true)).toBe(true);
+    expect(data.map(d => d.name)).toEqual(['Active One', 'Active Two']);
+  });
+
+  it('should filter profiles by status "inactive"', () => {
+    service._profiles = [
+      { id: '1', name: 'Active One', isActive: true },
+      { id: '2', name: 'Inactive One', isActive: false },
+      { id: '3', name: 'Inactive Two', isActive: false },
+    ];
+    fixture = TestBed.createComponent(BusinessList);
+    component = fixture.componentInstance;
+
+    component.setStatusFilter('inactive');
+
+    const data = component.dataSource.data as any[];
+    expect(data.every(d => d.isActive === false)).toBe(true);
+    expect(data.map(d => d.name)).toEqual(['Inactive One', 'Inactive Two']);
+  });
+
+  it('should reset paginator to first page on search', () => {
+    fixture = TestBed.createComponent(BusinessList);
+    component = fixture.componentInstance;
+
+    const firstPage = vi.fn();
+    // Set the paginator on the dataSource directly since onSearch checks dataSource.paginator
+    (component.dataSource as any).paginator = { firstPage } as unknown as MatPaginator;
+
+    component.onSearch({ target: { value: 'query' } } as unknown as Event);
+    expect(firstPage).toHaveBeenCalledTimes(1);
+  });
+
+  it('should use custom filterPredicate to search across fields', () => {
+    fixture = TestBed.createComponent(BusinessList);
+    component = fixture.componentInstance;
+
+    const item = { name: 'Acme', accountId: 'ACC-123', isActive: true } as any;
+    const predicate = component.dataSource.filterPredicate;
+
+    expect(predicate(item, 'acme')).toBe(true);
+    expect(predicate(item, 'acc-123')).toBe(true);
+    expect(predicate(item, 'missing-term')).toBe(false);
+  });
 });
