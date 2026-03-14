@@ -1,4 +1,13 @@
-import { Component, inject, signal, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ViewChild,
+  AfterViewInit,
+  effect,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { BusinessService } from '../../core/models/services/business.service';
@@ -13,7 +22,16 @@ import { BusinessProfile } from '../../core/models/business.model';
 @Component({
   selector: 'app-business-list',
   standalone: true,
-  imports: [CommonModule, TabNavigationComponent, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, MatMenuModule, RouterLink],
+  imports: [
+    CommonModule,
+    TabNavigationComponent,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatButtonModule,
+    MatMenuModule,
+    RouterLink,
+  ],
   templateUrl: './business-list.html',
   styleUrl: './business-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,8 +45,15 @@ export class BusinessList implements AfterViewInit {
   readonly currentTab = signal<'profile' | 'templates'>('profile');
 
   dataSource = new MatTableDataSource<BusinessProfile>([]);
-  readonly displayedColumns: string[] = ['name', 'accountId', 'whatsapp', 'phoneId', 'status', 'actions'];
-  
+  readonly displayedColumns: string[] = [
+    'name',
+    'accountId',
+    'whatsapp',
+    'phoneId',
+    'status',
+    'actions',
+  ];
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor() {
@@ -43,16 +68,16 @@ export class BusinessList implements AfterViewInit {
       let data = this.currentTab() === 'profile' ? this.businessService.profiles() : [];
 
       if (this.selectedFilter() === 'active') {
-        data = data.filter(item => item.isActive === true);
+        data = data.filter((item) => item.isActive === true);
       } else if (this.selectedFilter() === 'inactive') {
-        data = data.filter(item => item.isActive === false);
+        data = data.filter((item) => item.isActive === false);
       }
 
-      this.dataSource.data = [...data].sort((a, b) => 
-        (a.Name || '').toLowerCase().localeCompare((b.Name || '').toLowerCase())
+      this.dataSource.data = [...data].sort((a, b) =>
+        (a.Name || '').toLowerCase().localeCompare((b.Name || '').toLowerCase()),
       );
 
-      this.cdr.markForCheck(); 
+      this.cdr.markForCheck();
     });
   }
 

@@ -8,21 +8,21 @@ body {
   margin: 0;
   font-family: 'Benton Sans Pro', sans-serif;
   background-color: white;
-  overflow-x: hidden; /* Prevents whole-page horizontal scrolling */
+  overflow-x: hidden;
 }
 
 .layout-container {
   width: 100%;
-  max-width: 1440px; /* Desktop limit */
+  max-width: 1440px;
   margin: 0 auto;
 
   .main-content {
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
-    
+
     @media (min-width: 992px) {
-      padding: 40px 40px 40px 100px; /* Respects sidebar on desktop */
+      padding: 40px 40px 40px 100px;
     }
   }
 }
@@ -32,7 +32,7 @@ body {
 
   .mat-mdc-form-field {
     --mdc-filled-text-field-container-color: transparent;
-    
+
     --mdc-filled-text-field-active-indicator-color: #ced3d9;
     --mdc-filled-text-field-idle-indicator-color: #ced3d9;
     --mdc-filled-text-field-active-indicator-height: 1px;

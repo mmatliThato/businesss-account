@@ -41,9 +41,9 @@ import { MatIconModule } from '@angular/material/icon';
   styles: [
     `
       .sidebar-wrapper {
-        width: 64px; /* */
+        width: 64px;
         height: 100vh;
-        background-color: #ffffff; /* */
+        background-color: #ffffff;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -55,46 +55,46 @@ import { MatIconModule } from '@angular/material/icon';
       .nav-stack {
         display: flex;
         flex-direction: column;
-        gap: 8px; /* */
+        gap: 8px;
       }
 
       .nav-item {
         width: 64px;
-        height: 64px; 
+        height: 64px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 4px; 
-        padding: 8px 4px; 
+        gap: 4px;
+        padding: 8px 4px;
         text-decoration: none;
-        color: #222e37; 
+        color: #222e37;
         background: #ffffff;
-        border-radius: 8px; 
+        border-radius: 8px;
         position: relative;
         transition: all 0.2s ease;
         box-sizing: border-box;
       }
 
       .nav-item.active-state {
-  color: var(--secondary-color, #0051FF) !important;
-  background-color: rgba(0, 81, 255, 0.04);
-  position: relative;
+        color: var(--secondary-color, #0051ff) !important;
+        background-color: rgba(0, 81, 255, 0.04);
+        position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%); 
-    
-    width: 3px;
-    height: 48px; 
-    
-    background: var(--secondary-color, #0051FF);
-    border-radius: 4px;
-  }
-}
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+
+          width: 3px;
+          height: 48px;
+
+          background: var(--secondary-color, #0051ff);
+          border-radius: 4px;
+        }
+      }
 
       .icon-container {
         width: 18px;
@@ -112,15 +112,15 @@ import { MatIconModule } from '@angular/material/icon';
       }
 
       .nav-label {
-        width: 56px; 
+        width: 56px;
         height: 26px;
         font-family: 'Benton Sans Pro', sans-serif;
         font-size: 10px;
-        font-weight: 400; 
+        font-weight: 400;
         line-height: 130%;
         text-align: center;
         letter-spacing: 0px;
-        color: inherit; 
+        color: inherit;
         display: block;
       }
 

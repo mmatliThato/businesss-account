@@ -11,13 +11,7 @@ import { BusinessAccount, BusinessProfile } from '../../core/models/business.mod
 @Component({
   selector: 'app-business-details',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatSlideToggleModule,
-    MatRadioModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, FormsModule, MatSlideToggleModule, MatRadioModule, MatIconModule],
   templateUrl: './business-details.html',
   styleUrl: './business-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +41,9 @@ export class BusinessDetails implements OnInit {
 
   loadDetails(id: string) {
     this.loading.set(true);
-    const foundAccount = this.businessService.accounts().find(a => (a.Id || (a as any).id) === id);
+    const foundAccount = this.businessService
+      .accounts()
+      .find((a) => (a.Id || (a as any).id) === id);
     if (foundAccount) {
       this.isAccount.set(true);
       this.account.set(foundAccount);
@@ -56,7 +52,9 @@ export class BusinessDetails implements OnInit {
       return;
     }
 
-    const foundProfile = this.businessService.profiles().find(p => (p.Id || (p as any).id) === id);
+    const foundProfile = this.businessService
+      .profiles()
+      .find((p) => (p.Id || (p as any).id) === id);
     if (foundProfile) {
       this.isAccount.set(false);
       this.profile.set(foundProfile);
@@ -74,13 +72,23 @@ export class BusinessDetails implements OnInit {
     this.apiAddress.set(data.ApiAddress || '');
   }
 
-  getDisplayName() { return this.isAccount() ? this.account()?.Name : this.profile()?.Name; }
-  getWhatsAppNumber() { return this.isAccount() ? this.account()?.WhatsAppNumber : this.profile()?.WhatsAppNumber; }
-  getStatus() { return this.isAccount() ? this.account()?.isActive : this.profile()?.isActive; }
-  getAccountId() { return this.id(); }
+  getDisplayName() {
+    return this.isAccount() ? this.account()?.Name : this.profile()?.Name;
+  }
+  getWhatsAppNumber() {
+    return this.isAccount() ? this.account()?.WhatsAppNumber : this.profile()?.WhatsAppNumber;
+  }
+  getStatus() {
+    return this.isAccount() ? this.account()?.isActive : this.profile()?.isActive;
+  }
+  getAccountId() {
+    return this.id();
+  }
 
   getCreatedDate(): string {
-    const rawDate = this.isAccount() ? (this.account() as any)?.DateCreated : (this.profile() as any)?.DateCreated;
+    const rawDate = this.isAccount()
+      ? (this.account() as any)?.DateCreated
+      : (this.profile() as any)?.DateCreated;
     return rawDate ? new Date(rawDate).toLocaleDateString('en-GB') : 'N/A';
   }
 

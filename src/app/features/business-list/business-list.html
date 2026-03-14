@@ -1,14 +1,11 @@
 <div class="admin-portal-list">
   <div class="screen-container">
     <div class="content-frame">
-      
       <header class="page-header">
         <h1>Home</h1>
       </header>
 
-      <app-tab-navigation 
-        [currentTab]="currentTab()" 
-        (tabSelected)="currentTab.set($event)">
+      <app-tab-navigation [currentTab]="currentTab()" (tabSelected)="currentTab.set($event)">
       </app-tab-navigation>
 
       <div class="table-action-bar">
@@ -18,27 +15,25 @@
         </div>
 
         <div class="action-group">
-          
-    <button class="filter-btn" [matMenuTriggerFor]="statusMenu">
-  <span>{{ selectedFilter() === 'all' ? 'All' : (selectedFilter() | titlecase) }}</span>
-  <mat-icon>expand_more</mat-icon>
-</button>
+          <button class="filter-btn" [matMenuTriggerFor]="statusMenu">
+            <span>{{ selectedFilter() === 'all' ? 'All' : (selectedFilter() | titlecase) }}</span>
+            <mat-icon>expand_more</mat-icon>
+          </button>
 
-<mat-menu #statusMenu="matMenu" class="custom-details-menu">
-  <button mat-menu-item (click)="setFilter('all')">
-    <mat-icon>list</mat-icon>
-    <span>All</span>
-  </button>
-  <button mat-menu-item (click)="setFilter('active')">
-    <mat-icon style="color: #05cd99;">check_circle</mat-icon>
-    <span>Active</span>
-  </button>
-  <button mat-menu-item (click)="setFilter('inactive')">
-    <mat-icon style="color: #ee5d50;">cancel</mat-icon>
-    <span>Inactive</span>
-  </button>
-</mat-menu>
-
+          <mat-menu #statusMenu="matMenu" class="custom-details-menu">
+            <button mat-menu-item (click)="setFilter('all')">
+              <mat-icon>list</mat-icon>
+              <span>All</span>
+            </button>
+            <button mat-menu-item (click)="setFilter('active')">
+              <mat-icon style="color: #05cd99">check_circle</mat-icon>
+              <span>Active</span>
+            </button>
+            <button mat-menu-item (click)="setFilter('inactive')">
+              <mat-icon style="color: #ee5d50">cancel</mat-icon>
+              <span>Inactive</span>
+            </button>
+          </mat-menu>
 
           <button class="add-btn">
             <mat-icon>add</mat-icon>
@@ -49,7 +44,6 @@
 
       <div class="table-card">
         <table mat-table [dataSource]="dataSource" class="premium-mat-table">
-          
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef>Name</th>
             <td mat-cell *matCellDef="let element" class="cell-name">
@@ -95,21 +89,25 @@
                 <mat-icon>more_vert</mat-icon>
               </button>
 
-             <mat-menu #menu="matMenu" class="custom-details-menu">
-  <button mat-menu-item [routerLink]="['/business-details', element.id || element.Id]">
-    <mat-icon class="menu-icon">visibility</mat-icon>
-    <span class="menu-text">View Details</span>
-  </button>
-</mat-menu>
+              <mat-menu #menu="matMenu" class="custom-details-menu">
+                <button
+                  mat-menu-item
+                  [routerLink]="['/business-details', element.id || element.Id]"
+                >
+                  <mat-icon class="menu-icon">visibility</mat-icon>
+                  <span class="menu-text">View Details</span>
+                </button>
+              </mat-menu>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row 
-              *matRowDef="let row; columns: displayedColumns" 
-              class="clickable-row" 
-              (click)="navigateToDetails(row.id || row.Id)">
-          </tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            class="clickable-row"
+            (click)="navigateToDetails(row.id || row.Id)"
+          ></tr>
         </table>
 
         <mat-paginator [pageSizeOptions]="[10, 20, 50]" class="custom-paginator"></mat-paginator>

@@ -8,14 +8,14 @@
   .screen-container {
     display: flex;
     justify-content: center;
-    padding: 20px; 
+    padding: 20px;
     box-sizing: border-box;
     width: 100%;
   }
 
   .content-frame {
     width: 100%;
-    max-width: 1230px; 
+    max-width: 1230px;
     display: flex;
     flex-direction: column;
   }
@@ -28,34 +28,42 @@
 
     h1 {
       font-family: 'Benton Sans Pro', sans-serif;
-      font-size: clamp(24px, 5vw, 32px); 
-      font-weight: 500; 
+      font-size: clamp(24px, 5vw, 32px);
+      font-weight: 500;
       color: #000000;
-      margin: 0; 
+      margin: 0;
     }
   }
 
   .table-action-bar {
     display: flex;
-    flex-wrap: wrap; /* Allows search and buttons to stack if screen is narrow */
+    flex-wrap: wrap;
     width: 100%;
     gap: 16px;
     margin-top: 24px;
     align-items: center;
 
     .search-wrapper {
-      flex: 1; /* Search bar fills available space */
+      flex: 1;
       min-width: 280px;
       height: 48px;
       display: flex;
       align-items: center;
       padding: 0 16px;
-      background: #FFFFFF;
-      border: 1px solid #CED3D9;
-      border-radius: 12px; 
+      background: #ffffff;
+      border: 1px solid #ced3d9;
+      border-radius: 12px;
 
-      mat-icon { color: #9CA3AF; margin-right: 12px; }
-      input { border: none; outline: none; width: 100%; font-size: 14px; }
+      mat-icon {
+        color: #9ca3af;
+        margin-right: 12px;
+      }
+      input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 14px;
+      }
     }
 
     .action-group {
@@ -64,10 +72,10 @@
       flex-wrap: wrap;
 
       .filter-btn {
-        width: 180px; 
+        width: 180px;
         height: 48px;
-        background: #FFFFFF;
-        border: 1px solid #CED3D9;
+        background: #ffffff;
+        border: 1px solid #ced3d9;
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -78,7 +86,7 @@
       .add-btn {
         padding: 0 24px;
         height: 48px;
-        background: #003FCA;
+        background: #003fca;
         color: #fff;
         border: none;
         border-radius: 8px;
@@ -93,11 +101,11 @@
 
   .table-card {
     background: #fff;
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
     margin-top: 16px;
     width: 100%;
-    overflow-x: auto; 
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -106,14 +114,15 @@
     min-width: 900px;
 
     .mat-mdc-header-cell {
-      background: #F9FAFB;
+      background: #f9fafb;
       padding: 16px;
-      color: #4B5563;
+      color: #4b5563;
       font-weight: 500;
     }
 
-    .cell-name, .cell-mono { 
-      color: #222E37; 
+    .cell-name,
+    .cell-mono {
+      color: #222e37;
       font-size: 14px;
       padding: 16px;
     }

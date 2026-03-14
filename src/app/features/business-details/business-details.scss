@@ -43,13 +43,12 @@
   .form-card {
     background: #ffffff;
 
-    
     border: 1px solid #ced3d9;
     border-radius: 12px;
-padding: 32px;   
-gap: 10px; 
-display: flex;
-  flex-direction: column; 
+    padding: 32px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
   }
 
   .left-col {
@@ -75,7 +74,6 @@ display: flex;
         display: flex;
         align-items: center;
         margin-bottom: 16px;
-        
 
         label {
           width: 130px;
@@ -165,6 +163,12 @@ display: flex;
         max-width: 776px;
 
         .toggle-text {
+          width: 776px;
+          height: 52px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 10px;
           label {
             font-size: 16px;
             font-weight: 500;
@@ -333,6 +337,168 @@ display: flex;
       }
       .mdc-switch__track {
         opacity: 0.4 !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .content-frame {
+    padding: 24px;
+
+    .profile-grid {
+      grid-template-columns: 1fr !important;
+      gap: 24px;
+    }
+
+    .right-col {
+      .input-group.wide .base-input,
+      .settings-sub-section .flex-toggle-row,
+      .settings-sub-section .flex-toggle-row .toggle-text,
+      .settings-sub-section .input-split {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .content-frame {
+    padding: 16px;
+
+    .header-container {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      .primary-update-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    .info-card,
+    .form-card {
+      padding: 20px;
+    }
+
+    .right-col .settings-sub-section .input-split {
+      grid-template-columns: 1fr !important;
+
+      .input-group,
+      .input-group .base-input {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+    }
+  }
+}
+
+/* ---------- SMALL PHONES ---------- */
+@media (max-width: 480px) {
+  .content-frame .left-col .info-card .data-field {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+
+    label {
+      width: 100%;
+      margin-bottom: 2px;
+    }
+  }
+
+  .right-col .radio-row mat-radio-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .flex-toggle-row {
+    gap: 10px;
+    .toggle-text label {
+      font-size: 14px !important;
+    }
+  }
+}
+
+/* ---------- TABLET ---------- */
+@media (max-width: 1024px) {
+  .admin-portal-list {
+    .screen-container {
+      padding: 16px;
+    }
+
+    .table-action-bar {
+      .search-wrapper {
+        min-width: 100%;
+        order: 1;
+      }
+
+      .action-group {
+        width: 100%;
+        order: 2;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 768px) {
+  .admin-portal-list {
+    .page-header {
+      margin-bottom: 16px;
+      h1 {
+        font-size: 24px;
+      }
+    }
+
+    .table-action-bar {
+      gap: 12px;
+
+      .action-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+
+        .filter-btn,
+        .add-btn {
+          width: 100% !important;
+          justify-content: center;
+        }
+      }
+    }
+
+    .table-card {
+      border-radius: 8px;
+      border-left: none;
+      border-right: none;
+    }
+  }
+}
+
+/* ---------- SMALL PHONES ---------- */
+@media (max-width: 480px) {
+  .admin-portal-list {
+    .table-action-bar {
+      .action-group {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .table-card {
+      position: relative;
+      &::after {
+        content: 'Scroll →';
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        font-size: 10px;
+        color: #9ca3af;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 2px 6px;
+        border-radius: 4px;
+        pointer-events: none;
       }
     }
   }

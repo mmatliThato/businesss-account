@@ -16,9 +16,9 @@ export class BusinessService {
     this.loading.set(true);
     return this.http.get<BusinessAccount[]>(`${this.baseUrl}/business-accounts`).pipe(
       tap((data) => {
-        this.accounts.set(data); // Updates signal to fix "0 of 0"
+        this.accounts.set(data);
         this.loading.set(false);
-      })
+      }),
     );
   }
 
@@ -26,9 +26,9 @@ export class BusinessService {
     this.loading.set(true);
     return this.http.get<BusinessProfile[]>(`${this.baseUrl}/business-profiles`).pipe(
       tap((data) => {
-        this.profiles.set(data); // Updates signal to fix "0 of 0"
+        this.profiles.set(data);
         this.loading.set(false);
-      })
+      }),
     );
   }
 }
