@@ -1,134 +1,95 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { BusinessService } from '../../core/models/services/business.service';
-import { BusinessAccount, BusinessProfile } from '../../core/models/business.model';
-import { ActivatedRoute } from '@angular/router';
+import { Component, inject, signal, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '../../shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { BusinessService } from '../../core/models/services/business.service';
+import { BusinessAccount, BusinessProfile } from '../../core/models/business.model';
 
 @Component({
   selector: 'app-business-details',
   standalone: true,
   imports: [
     CommonModule,
-    SharedModule,
     FormsModule,
     MatSlideToggleModule,
-    MatRadioModule
+    MatRadioModule,
+    MatIconModule
   ],
   templateUrl: './business-details.html',
   styleUrl: './business-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BusinessDetails {
+export class BusinessDetails implements OnInit {
   private businessService = inject(BusinessService);
   private route = inject(ActivatedRoute);
 
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
+  id = signal<string>('');
 
   account = signal<BusinessAccount | null>(null);
   profile = signal<BusinessProfile | null>(null);
-
   isAccount = signal<boolean>(true);
-  id = signal<string>('');
 
   apiName = signal<string>('');
   apiEnvironment = signal<'development' | 'production'>('development');
   replyCallbackEnabled = signal<boolean>(false);
   apiAddress = signal<string>('');
-  clientSecret = signal<string>('');
 
-  constructor() {
-    const id = this.route.snapshot.paramMap.get('id') || '';
-    this.id.set(id);
-    this.loadDetails(id);
-  }
-
-  onUpdate(): void {
-    console.log('Update payload:', {
-      id: this.id(),
-      name: this.apiName(),
-      environment: this.apiEnvironment(),
-      address: this.apiAddress(),
-      callback: this.replyCallbackEnabled(),
-    });
-  }
-
-  toggleReplyCallback(): void {
-    this.replyCallbackEnabled.update((val) => !val);
-  }
-
-  getAccountId(): string {
-    return this.id();
+  ngOnInit() {
+    const routeId = this.route.snapshot.paramMap.get('id') || '';
+    this.id.set(routeId);
+    this.loadDetails(routeId);
   }
 
   loadDetails(id: string) {
     this.loading.set(true);
-    this.error.set(null);
-
-    const account = this.businessService.accounts().find(a => a.Id === id);
-
-    if (account) {
+    const foundAccount = this.businessService.accounts().find(a => (a.Id || (a as any).id) === id);
+    if (foundAccount) {
       this.isAccount.set(true);
-      this.account.set(account);
-      this.apiName.set(account.Name || '');
+      this.account.set(foundAccount);
+      this.syncForm(foundAccount);
       this.loading.set(false);
       return;
     }
 
-    const profile = this.businessService.profiles().find(p => p.Id === id);
-
-    if (profile) {
+    const foundProfile = this.businessService.profiles().find(p => (p.Id || (p as any).id) === id);
+    if (foundProfile) {
       this.isAccount.set(false);
-      this.profile.set(profile);
-
-      this.apiName.set(profile.Name || '');
-      this.apiAddress.set(profile.ApiAddress || '');
-      this.clientSecret.set(profile.ClientSecret || '');
-      this.replyCallbackEnabled.set(profile.ReplyCallbackEnabled || false);
-
+      this.profile.set(foundProfile);
+      this.syncForm(foundProfile);
       this.loading.set(false);
       return;
     }
-
-    this.fetchFromApi(id);
+    this.loading.set(false);
   }
 
-  private fetchFromApi(id: string) {
-    const hasAccounts = this.businessService.accounts().length > 0;
-    const hasProfiles = this.businessService.profiles().length > 0;
-
-    if (!hasAccounts) {
-      this.businessService.fetchAccounts();
-    }
-
-    if (!hasProfiles) {
-      this.businessService.fetchProfiles();
-    }
-
-    setTimeout(() => {
-      this.loadDetails(id);
-    }, 500);
+  private syncForm(data: any) {
+    this.apiName.set(data.Name || data.name || '');
+    this.apiEnvironment.set(data.environment || 'development');
+    this.replyCallbackEnabled.set(data.ReplyCallbackEnabled || false);
+    this.apiAddress.set(data.ApiAddress || '');
   }
 
-  getDisplayName(): string {
-    return this.isAccount()
-      ? this.account()?.Name || ''
-      : this.profile()?.Name || '';
+  getDisplayName() { return this.isAccount() ? this.account()?.Name : this.profile()?.Name; }
+  getWhatsAppNumber() { return this.isAccount() ? this.account()?.WhatsAppNumber : this.profile()?.WhatsAppNumber; }
+  getStatus() { return this.isAccount() ? this.account()?.isActive : this.profile()?.isActive; }
+  getAccountId() { return this.id(); }
+
+  getCreatedDate(): string {
+    const rawDate = this.isAccount() ? (this.account() as any)?.DateCreated : (this.profile() as any)?.DateCreated;
+    return rawDate ? new Date(rawDate).toLocaleDateString('en-GB') : 'N/A';
   }
 
-  getWhatsAppNumber(): string {
-    return this.isAccount()
-      ? this.account()?.WhatsAppNumber || ''
-      : this.profile()?.WhatsAppNumber || '';
+  getMaskedKey(): string {
+    const key = (this.profile() as any)?.ApiKey || '••••••••••••••••';
+    return key.length > 4 ? `••••${key.slice(-4)}` : key;
   }
 
-  getStatus(): boolean {
-    return this.isAccount()
-      ? this.account()?.isActive || false
-      : this.profile()?.isActive || false;
+  onUpdate() {
+    console.log('Updating:', { id: this.id(), name: this.apiName(), env: this.apiEnvironment() });
   }
 }

@@ -54,7 +54,7 @@
           </div>
           <div class="data-field">
             <label>Date created</label>
-            <p>12/03/2026</p>
+            <p>{{ getCreatedDate() }}</p>
           </div>
         </section>
 
@@ -62,7 +62,7 @@
           <h3>API Details</h3>
           <div class="data-field">
             <label>API name</label>
-            <p>Populated</p>
+            <p>{{ apiName() || 'N/A' }}</p>
           </div>
           <div class="data-field">
             <label>Setup type</label>
@@ -70,7 +70,7 @@
           </div>
           <div class="data-field">
             <label>API key</label>
-            <p class="code-font">••••••••••••••••</p>
+            <p class="code-font">{{ getMaskedKey() }}</p>
           </div>
           <div class="data-field">
             <label>API ID</label>
