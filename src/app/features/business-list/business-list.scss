@@ -110,21 +110,46 @@
   }
 
   .premium-mat-table {
-    width: 100%;
-    min-width: 900px;
-
     .mat-mdc-header-cell {
       background: #f9fafb;
       padding: 16px;
-      color: #4b5563;
-      font-weight: 500;
-    }
 
-    .cell-name,
-    .cell-mono {
-      color: #222e37;
+      font-family: 'Benton Sans Pro', sans-serif;
       font-size: 14px;
+      font-weight: 500;
+      line-height: 1.3;
+      color: #4b5563;
+    }
+    .mat-column-status {
       padding: 16px;
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #f4f7fe;
+        color: #ee5d50;
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #ee5d50;
+        }
+
+        &.active {
+          background: #e6f9f0;
+          color: #05cd99;
+
+          .dot {
+            background: #05cd99;
+          }
+        }
+      }
     }
   }
 }

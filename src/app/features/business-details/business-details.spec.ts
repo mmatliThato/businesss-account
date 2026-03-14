@@ -12,11 +12,11 @@ describe('BusinessDetails', () => {
     await TestBed.configureTestingModule({
       imports: [BusinessDetails],
       providers: [
-        provideRouter([]), 
-        { 
-          provide: BusinessService, 
-          useValue: { getBusinessById: () => of({}), currentBusiness: () => ({}) } 
-        }
+        provideRouter([]),
+        {
+          provide: BusinessService,
+          useValue: { getBusinessById: () => of({}), currentBusiness: () => ({}) },
+        },
       ],
     }).compileComponents();
 

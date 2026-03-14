@@ -16,7 +16,7 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { TabNavigationComponent } from '../business-profile/tab-navigation.component';
+import { TabNavigationComponent } from '../../shared/components/tab-navigation.component';
 import { BusinessProfile } from '../../core/models/business.model';
 
 @Component({

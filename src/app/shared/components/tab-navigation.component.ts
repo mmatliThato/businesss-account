@@ -23,7 +23,6 @@ import { CommonModule } from '@angular/common';
         display: flex;
         gap: 32px;
         margin-bottom: 24px;
-        /* REMOVED: border-bottom: 1px solid #CED3D9; */
         width: 1280px;
       }
 
@@ -46,7 +45,6 @@ import { CommonModule } from '@angular/common';
         font-weight: 600;
       }
 
-      /* This creates the blue underline only under the active text */
       .tab-button.active::after {
         content: '';
         position: absolute;

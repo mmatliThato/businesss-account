@@ -14,10 +14,10 @@ describe('BusinessList', () => {
       imports: [BusinessList],
       providers: [
         provideRouter([]),
-        { 
-          provide: BusinessService, 
-          useValue: { profiles: signal([]), fetchProfiles: () => of([]) } 
-        }
+        {
+          provide: BusinessService,
+          useValue: { profiles: signal([]), fetchProfiles: () => of([]) },
+        },
       ],
     }).compileComponents();
 
