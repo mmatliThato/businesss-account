@@ -1,6 +1,6 @@
 import { Component, inject, signal, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { BusinessService } from '../../core/models/services/business.service';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
@@ -12,7 +12,10 @@ import { TabNavigationComponent } from '../business-profile/tab-navigation.compo
 @Component({
   selector: 'app-business-list',
   standalone: true,
-  imports: [CommonModule, TabNavigationComponent, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [CommonModule, TabNavigationComponent, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule, MatMenuModule,
+   RouterLink
+
+  ],
   templateUrl: './business-list.html',
   styleUrl: './business-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
